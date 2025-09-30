@@ -1,6 +1,6 @@
 # QCM
 
-Quantum advantage in latent space.
+Quantum advantage for medical applications.
 
 ## Quick Start
 
@@ -15,7 +15,14 @@ Quantum advantage in latent space.
     pip install -r requirements.txt
     ```
 
-3.  **Train the model:**
+3.  **Set up the data:**
+    Download and extract the dataset into the `src/data` directory.
+    ```bash
+    wget "https://surfdrive.surf.nl/index.php/s/mx0RdFXHHDfcY3g/download" -O pcam_tcga.tar
+    tar -xf pcam_tcga.tar -C src/data/
+    ```
+
+4.  **Train the model:**
     Choose between classical and quantum mode by changing the `--mode` flag.
 
     * **Classical Mode:**
