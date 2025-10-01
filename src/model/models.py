@@ -128,6 +128,8 @@ class QuantumHeadAmplitude(nn.Module):
         
         return self.classifier(quantum_features)
 
+
+
 # =============================================================================
 # Main Classifier
 # =============================================================================
