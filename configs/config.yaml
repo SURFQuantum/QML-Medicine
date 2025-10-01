@@ -1,5 +1,5 @@
 # Toggles between 'pcam' (binary image classification) and 'tcga' (multiclass embedding classification)
-dataset_type: 'tcga' 
+dataset_type: 'pcam'
 
 pcam_data:
   path: "./src/data/pcam"
