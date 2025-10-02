@@ -1,0 +1,34 @@
+# Toggles between 'pcam' (binary image classification) and 'tcga' (multiclass embedding classification)
+dataset_type: 'pcam' 
+
+pcam_data:
+  path: "./src/data/pcam"
+
+tcga_data:
+  pickle_path: "./src/data/tcga/tcga_titan_embeddings_reports.pkl"
+  csv_path: "./src/data/tcga/tcga_patient_to_cancer_type.csv"
+  val_split: 0.1 # 20% of data for validation
+
+model:
+  # --- For PCAM ---
+  pcam_filters: 2
+
+  # --- For TCGA / Quantum Heads ---
+  # For QuantumHeadAmplitude, latent_dim will be automatically set to 2**n_qubits.
+  # For QuantumHeadAngle, latent_dim will be equal to n_qubits.
+  # For ClassicalHead, this is the embedding size before the final layer.
+  latent_dim: 27 
+  n_qubits: 3 # For TCGA, latent_dim for Amplitude head will be 2**4 = 16
+  n_quantum_layers: 3
+  num_classes: 2 # Number of unique cancer types in TCGA dataset
+
+  # 'amplitude' or 'angle'
+  quantum_head_type: 'reupload' 
+  # 'strong' for StronglyEntanglingLayers or 'basic' for BasicEntanglerLayers
+  entangling_layer: 'strong'
+
+training:
+  batch_size: 512
+  lr: 0.0006
+  epochs: 50
+  num_workers: 8
