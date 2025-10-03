@@ -182,7 +182,7 @@ class HybridClassifier(nn.Module):
                 self.head = QuantumHeadAngle(
                     n_qubits=n_qubits,
                     num_classes=num_classes,
-                    n_layers=self.num_quanum_layers,
+                    n_layers=self.num_quantum_layers,
                     entangling_layer=model_cfg['entangling_layer']
                 )
             else:

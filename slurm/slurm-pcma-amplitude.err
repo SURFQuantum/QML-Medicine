@@ -1,0 +1,349 @@
+2025-10-02 18:31:01,479 - INFO - 
+--- Starting run for **num_quantum_layers = 0** (Mode: Classical) ---
+2025-10-02 18:31:01,479 - INFO - Initializing model for dataset 'pcam' in classical mode with 0 quantum layers
+2025-10-02 18:31:01,674 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 18:31:31,005 - INFO - Validation Epoch 0: Loss=0.4536, F1 Score=0.7885
+2025-10-02 18:31:59,738 - INFO - Validation Epoch 1: Loss=0.4318, F1 Score=0.8039
+2025-10-02 18:32:28,098 - INFO - Validation Epoch 2: Loss=0.4239, F1 Score=0.8118
+2025-10-02 18:32:56,831 - INFO - Validation Epoch 3: Loss=0.4304, F1 Score=0.8142
+2025-10-02 18:33:26,799 - INFO - Validation Epoch 4: Loss=0.4411, F1 Score=0.8029
+2025-10-02 18:33:56,244 - INFO - Validation Epoch 5: Loss=0.4124, F1 Score=0.8200
+2025-10-02 18:34:24,576 - INFO - Validation Epoch 6: Loss=0.4244, F1 Score=0.8192
+2025-10-02 18:34:52,737 - INFO - Validation Epoch 7: Loss=0.4178, F1 Score=0.8124
+2025-10-02 18:35:21,008 - INFO - Validation Epoch 8: Loss=0.4221, F1 Score=0.8159
+2025-10-02 18:35:49,851 - INFO - Validation Epoch 9: Loss=0.4156, F1 Score=0.8178
+2025-10-02 18:36:18,512 - INFO - Validation Epoch 10: Loss=0.4143, F1 Score=0.8172
+2025-10-02 18:36:46,975 - INFO - Validation Epoch 11: Loss=0.4207, F1 Score=0.8132
+2025-10-02 18:37:14,966 - INFO - Validation Epoch 12: Loss=0.4208, F1 Score=0.8138
+2025-10-02 18:37:42,687 - INFO - Validation Epoch 13: Loss=0.4242, F1 Score=0.8108
+2025-10-02 18:38:10,973 - INFO - Validation Epoch 14: Loss=0.4106, F1 Score=0.8193
+2025-10-02 18:38:39,200 - INFO - Validation Epoch 15: Loss=0.4049, F1 Score=0.8230
+2025-10-02 18:39:07,163 - INFO - Validation Epoch 16: Loss=0.4063, F1 Score=0.8202
+2025-10-02 18:39:35,572 - INFO - Validation Epoch 17: Loss=0.4156, F1 Score=0.8152
+2025-10-02 18:40:04,720 - INFO - Validation Epoch 18: Loss=0.4084, F1 Score=0.8224
+2025-10-02 18:40:33,032 - INFO - Validation Epoch 19: Loss=0.4232, F1 Score=0.8112
+2025-10-02 18:41:02,021 - INFO - Validation Epoch 20: Loss=0.4071, F1 Score=0.8190
+2025-10-02 18:41:30,090 - INFO - Validation Epoch 21: Loss=0.4110, F1 Score=0.8181
+2025-10-02 18:41:58,404 - INFO - Validation Epoch 22: Loss=0.4076, F1 Score=0.8228
+2025-10-02 18:42:27,129 - INFO - Validation Epoch 23: Loss=0.4071, F1 Score=0.8179
+2025-10-02 18:42:56,034 - INFO - Validation Epoch 24: Loss=0.4092, F1 Score=0.8187
+2025-10-02 18:43:23,567 - INFO - Validation Epoch 25: Loss=0.4022, F1 Score=0.8225
+2025-10-02 18:43:52,016 - INFO - Validation Epoch 26: Loss=0.4104, F1 Score=0.8161
+2025-10-02 18:44:21,600 - INFO - Validation Epoch 27: Loss=0.4088, F1 Score=0.8147
+2025-10-02 18:44:55,929 - INFO - Validation Epoch 28: Loss=0.4139, F1 Score=0.8139
+2025-10-02 18:45:26,968 - INFO - Validation Epoch 29: Loss=0.4101, F1 Score=0.8169
+2025-10-02 18:45:55,386 - INFO - Validation Epoch 30: Loss=0.4127, F1 Score=0.8134
+2025-10-02 18:46:24,035 - INFO - Validation Epoch 31: Loss=0.4120, F1 Score=0.8152
+2025-10-02 18:46:53,585 - INFO - Validation Epoch 32: Loss=0.4007, F1 Score=0.8230
+2025-10-02 18:47:22,894 - INFO - Validation Epoch 33: Loss=0.4034, F1 Score=0.8194
+2025-10-02 18:47:51,534 - INFO - Validation Epoch 34: Loss=0.4112, F1 Score=0.8142
+2025-10-02 18:48:19,545 - INFO - Validation Epoch 35: Loss=0.4083, F1 Score=0.8157
+2025-10-02 18:48:48,210 - INFO - Validation Epoch 36: Loss=0.4083, F1 Score=0.8151
+2025-10-02 18:49:17,368 - INFO - Validation Epoch 37: Loss=0.4044, F1 Score=0.8183
+2025-10-02 18:49:43,982 - INFO - Validation Epoch 38: Loss=0.4078, F1 Score=0.8163
+2025-10-02 18:50:13,240 - INFO - Validation Epoch 39: Loss=0.4106, F1 Score=0.8152
+2025-10-02 18:50:40,707 - INFO - Validation Epoch 40: Loss=0.4090, F1 Score=0.8166
+2025-10-02 18:51:08,870 - INFO - Validation Epoch 41: Loss=0.4051, F1 Score=0.8186
+2025-10-02 18:51:36,783 - INFO - Validation Epoch 42: Loss=0.4076, F1 Score=0.8142
+2025-10-02 18:52:05,359 - INFO - Validation Epoch 43: Loss=0.4033, F1 Score=0.8207
+2025-10-02 18:52:35,224 - INFO - Validation Epoch 44: Loss=0.4083, F1 Score=0.8154
+2025-10-02 18:53:02,935 - INFO - Validation Epoch 45: Loss=0.4056, F1 Score=0.8181
+2025-10-02 18:53:30,504 - INFO - Validation Epoch 46: Loss=0.4060, F1 Score=0.8170
+2025-10-02 18:53:58,369 - INFO - Validation Epoch 47: Loss=0.4061, F1 Score=0.8166
+2025-10-02 18:54:26,799 - INFO - Validation Epoch 48: Loss=0.4097, F1 Score=0.8137
+2025-10-02 18:54:54,450 - INFO - Validation Epoch 49: Loss=0.4083, F1 Score=0.8145
+2025-10-02 18:54:54,481 - INFO - Losses for run 'pcam_classical_Q0_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 18:54:54,505 - INFO - Model backbone saved to models/model_backbone_pcam_classical_Q0_20251002_183101.pt
+2025-10-02 18:55:52,663 - INFO - Latent visualization saved.
+2025-10-02 18:55:52,664 - INFO - 
+--- Starting run for **num_quantum_layers = 1** (Mode: Hybrid) ---
+2025-10-02 18:55:52,664 - INFO - Initializing model for dataset 'pcam' in quantum mode with 1 quantum layers
+2025-10-02 18:55:52,677 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 18:56:26,795 - INFO - Validation Epoch 0: Loss=0.4907, F1 Score=0.7445
+2025-10-02 18:57:00,026 - INFO - Validation Epoch 1: Loss=0.4449, F1 Score=0.8037
+2025-10-02 18:57:33,446 - INFO - Validation Epoch 2: Loss=0.4276, F1 Score=0.8111
+2025-10-02 18:58:08,478 - INFO - Validation Epoch 3: Loss=0.4326, F1 Score=0.7996
+2025-10-02 18:58:42,049 - INFO - Validation Epoch 4: Loss=0.4272, F1 Score=0.8047
+2025-10-02 18:59:16,821 - INFO - Validation Epoch 5: Loss=0.4119, F1 Score=0.8124
+2025-10-02 18:59:49,592 - INFO - Validation Epoch 6: Loss=0.4309, F1 Score=0.8005
+2025-10-02 19:00:23,499 - INFO - Validation Epoch 7: Loss=0.4282, F1 Score=0.8012
+2025-10-02 19:00:56,878 - INFO - Validation Epoch 8: Loss=0.4314, F1 Score=0.8054
+2025-10-02 19:01:30,692 - INFO - Validation Epoch 9: Loss=0.4271, F1 Score=0.8031
+2025-10-02 19:02:04,806 - INFO - Validation Epoch 10: Loss=0.4168, F1 Score=0.8082
+2025-10-02 19:02:38,770 - INFO - Validation Epoch 11: Loss=0.4143, F1 Score=0.8014
+2025-10-02 19:03:12,048 - INFO - Validation Epoch 12: Loss=0.4295, F1 Score=0.7972
+2025-10-02 19:03:45,097 - INFO - Validation Epoch 13: Loss=0.4380, F1 Score=0.7817
+2025-10-02 19:04:18,145 - INFO - Validation Epoch 14: Loss=0.4327, F1 Score=0.7939
+2025-10-02 19:04:51,854 - INFO - Validation Epoch 15: Loss=0.4684, F1 Score=0.7479
+2025-10-02 19:05:24,634 - INFO - Validation Epoch 16: Loss=0.4425, F1 Score=0.7731
+2025-10-02 19:05:58,553 - INFO - Validation Epoch 17: Loss=0.4506, F1 Score=0.7672
+2025-10-02 19:06:31,932 - INFO - Validation Epoch 18: Loss=0.4343, F1 Score=0.7835
+2025-10-02 19:07:04,925 - INFO - Validation Epoch 19: Loss=0.4340, F1 Score=0.7939
+2025-10-02 19:07:38,057 - INFO - Validation Epoch 20: Loss=0.4462, F1 Score=0.7777
+2025-10-02 19:08:11,334 - INFO - Validation Epoch 21: Loss=0.4362, F1 Score=0.7902
+2025-10-02 19:08:45,026 - INFO - Validation Epoch 22: Loss=0.4304, F1 Score=0.7923
+2025-10-02 19:09:19,263 - INFO - Validation Epoch 23: Loss=0.4548, F1 Score=0.7689
+2025-10-02 19:09:54,157 - INFO - Validation Epoch 24: Loss=0.4358, F1 Score=0.7883
+2025-10-02 19:10:26,830 - INFO - Validation Epoch 25: Loss=0.4285, F1 Score=0.7998
+2025-10-02 19:11:02,223 - INFO - Validation Epoch 26: Loss=0.4203, F1 Score=0.8068
+2025-10-02 19:11:35,611 - INFO - Validation Epoch 27: Loss=0.4395, F1 Score=0.7861
+2025-10-02 19:12:09,519 - INFO - Validation Epoch 28: Loss=0.4475, F1 Score=0.7828
+2025-10-02 19:12:42,879 - INFO - Validation Epoch 29: Loss=0.4395, F1 Score=0.7882
+2025-10-02 19:13:18,129 - INFO - Validation Epoch 30: Loss=0.4478, F1 Score=0.7794
+2025-10-02 19:13:51,698 - INFO - Validation Epoch 31: Loss=0.4463, F1 Score=0.7879
+2025-10-02 19:14:26,286 - INFO - Validation Epoch 32: Loss=0.4347, F1 Score=0.7895
+2025-10-02 19:15:02,720 - INFO - Validation Epoch 33: Loss=0.4471, F1 Score=0.7863
+2025-10-02 19:15:37,825 - INFO - Validation Epoch 34: Loss=0.4365, F1 Score=0.7918
+2025-10-02 19:16:13,344 - INFO - Validation Epoch 35: Loss=0.4484, F1 Score=0.7773
+2025-10-02 19:16:46,836 - INFO - Validation Epoch 36: Loss=0.4470, F1 Score=0.7833
+2025-10-02 19:17:20,248 - INFO - Validation Epoch 37: Loss=0.4398, F1 Score=0.7878
+2025-10-02 19:17:54,006 - INFO - Validation Epoch 38: Loss=0.4379, F1 Score=0.7888
+2025-10-02 19:18:28,035 - INFO - Validation Epoch 39: Loss=0.4550, F1 Score=0.7772
+2025-10-02 19:19:04,954 - INFO - Validation Epoch 40: Loss=0.4358, F1 Score=0.7903
+2025-10-02 19:19:41,330 - INFO - Validation Epoch 41: Loss=0.4311, F1 Score=0.7929
+2025-10-02 19:20:17,282 - INFO - Validation Epoch 42: Loss=0.4447, F1 Score=0.7819
+2025-10-02 19:20:52,688 - INFO - Validation Epoch 43: Loss=0.4539, F1 Score=0.7793
+2025-10-02 19:21:30,304 - INFO - Validation Epoch 44: Loss=0.4469, F1 Score=0.7821
+2025-10-02 19:22:06,098 - INFO - Validation Epoch 45: Loss=0.4468, F1 Score=0.7826
+2025-10-02 19:22:41,560 - INFO - Validation Epoch 46: Loss=0.4410, F1 Score=0.7868
+2025-10-02 19:23:14,610 - INFO - Validation Epoch 47: Loss=0.4463, F1 Score=0.7815
+2025-10-02 19:23:48,175 - INFO - Validation Epoch 48: Loss=0.4445, F1 Score=0.7850
+2025-10-02 19:24:22,094 - INFO - Validation Epoch 49: Loss=0.4388, F1 Score=0.7880
+2025-10-02 19:24:22,113 - INFO - Losses for run 'pcam_quantum_Q1_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 19:24:22,390 - INFO - Model backbone saved to models/model_backbone_pcam_quantum_Q1_20251002_183101.pt
+2025-10-02 19:25:28,160 - INFO - Latent visualization saved.
+2025-10-02 19:25:28,160 - INFO - 
+--- Starting run for **num_quantum_layers = 2** (Mode: Hybrid) ---
+2025-10-02 19:25:28,160 - INFO - Initializing model for dataset 'pcam' in quantum mode with 2 quantum layers
+2025-10-02 19:25:28,169 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 19:26:15,107 - INFO - Validation Epoch 0: Loss=0.4678, F1 Score=0.7708
+2025-10-02 19:27:01,512 - INFO - Validation Epoch 1: Loss=0.4429, F1 Score=0.7965
+2025-10-02 19:27:49,119 - INFO - Validation Epoch 2: Loss=0.4379, F1 Score=0.7982
+2025-10-02 19:28:35,600 - INFO - Validation Epoch 3: Loss=0.4536, F1 Score=0.7783
+2025-10-02 19:29:22,857 - INFO - Validation Epoch 4: Loss=0.4209, F1 Score=0.8020
+2025-10-02 19:30:08,935 - INFO - Validation Epoch 5: Loss=0.4311, F1 Score=0.8095
+2025-10-02 19:30:56,573 - INFO - Validation Epoch 6: Loss=0.4329, F1 Score=0.7929
+2025-10-02 19:31:43,098 - INFO - Validation Epoch 7: Loss=0.4162, F1 Score=0.8016
+2025-10-02 19:32:30,057 - INFO - Validation Epoch 8: Loss=0.4215, F1 Score=0.7916
+2025-10-02 19:33:17,789 - INFO - Validation Epoch 9: Loss=0.4276, F1 Score=0.7846
+2025-10-02 19:34:04,011 - INFO - Validation Epoch 10: Loss=0.4452, F1 Score=0.7719
+2025-10-02 19:34:51,450 - INFO - Validation Epoch 11: Loss=0.4356, F1 Score=0.7807
+2025-10-02 19:35:38,935 - INFO - Validation Epoch 12: Loss=0.4238, F1 Score=0.7900
+2025-10-02 19:36:25,071 - INFO - Validation Epoch 13: Loss=0.4313, F1 Score=0.7725
+2025-10-02 19:37:11,435 - INFO - Validation Epoch 14: Loss=0.4270, F1 Score=0.7728
+2025-10-02 19:37:58,364 - INFO - Validation Epoch 15: Loss=0.4360, F1 Score=0.7730
+2025-10-02 19:38:44,810 - INFO - Validation Epoch 16: Loss=0.4205, F1 Score=0.7956
+2025-10-02 19:39:31,682 - INFO - Validation Epoch 17: Loss=0.4223, F1 Score=0.8024
+2025-10-02 19:40:19,611 - INFO - Validation Epoch 18: Loss=0.4453, F1 Score=0.7593
+2025-10-02 19:41:06,291 - INFO - Validation Epoch 19: Loss=0.4288, F1 Score=0.7827
+2025-10-02 19:41:52,819 - INFO - Validation Epoch 20: Loss=0.4226, F1 Score=0.7879
+2025-10-02 19:42:43,426 - INFO - Validation Epoch 21: Loss=0.4494, F1 Score=0.7577
+2025-10-02 19:43:30,201 - INFO - Validation Epoch 22: Loss=0.4468, F1 Score=0.7626
+2025-10-02 19:44:20,081 - INFO - Validation Epoch 23: Loss=0.4266, F1 Score=0.7843
+2025-10-02 19:45:06,348 - INFO - Validation Epoch 24: Loss=0.4089, F1 Score=0.8083
+2025-10-02 19:45:54,334 - INFO - Validation Epoch 25: Loss=0.4324, F1 Score=0.7793
+2025-10-02 19:46:41,569 - INFO - Validation Epoch 26: Loss=0.4247, F1 Score=0.7835
+2025-10-02 19:47:27,969 - INFO - Validation Epoch 27: Loss=0.4322, F1 Score=0.7751
+2025-10-02 19:48:15,902 - INFO - Validation Epoch 28: Loss=0.4331, F1 Score=0.7716
+2025-10-02 19:49:02,350 - INFO - Validation Epoch 29: Loss=0.4228, F1 Score=0.7898
+2025-10-02 19:49:49,187 - INFO - Validation Epoch 30: Loss=0.4235, F1 Score=0.7855
+2025-10-02 19:50:37,432 - INFO - Validation Epoch 31: Loss=0.4301, F1 Score=0.7861
+2025-10-02 19:51:25,766 - INFO - Validation Epoch 32: Loss=0.4224, F1 Score=0.7938
+2025-10-02 19:52:13,044 - INFO - Validation Epoch 33: Loss=0.4307, F1 Score=0.7812
+2025-10-02 19:53:00,631 - INFO - Validation Epoch 34: Loss=0.4261, F1 Score=0.7896
+2025-10-02 19:53:48,594 - INFO - Validation Epoch 35: Loss=0.4243, F1 Score=0.7861
+2025-10-02 19:54:35,396 - INFO - Validation Epoch 36: Loss=0.4272, F1 Score=0.7847
+2025-10-02 19:55:22,827 - INFO - Validation Epoch 37: Loss=0.4200, F1 Score=0.7919
+2025-10-02 19:56:10,028 - INFO - Validation Epoch 38: Loss=0.4288, F1 Score=0.7828
+2025-10-02 19:56:56,520 - INFO - Validation Epoch 39: Loss=0.4266, F1 Score=0.7836
+2025-10-02 19:57:46,319 - INFO - Validation Epoch 40: Loss=0.4302, F1 Score=0.7808
+2025-10-02 19:58:33,057 - INFO - Validation Epoch 41: Loss=0.4300, F1 Score=0.7824
+2025-10-02 19:59:20,195 - INFO - Validation Epoch 42: Loss=0.4252, F1 Score=0.7878
+2025-10-02 20:00:08,345 - INFO - Validation Epoch 43: Loss=0.4281, F1 Score=0.7844
+2025-10-02 20:00:55,477 - INFO - Validation Epoch 44: Loss=0.4286, F1 Score=0.7857
+2025-10-02 20:01:43,711 - INFO - Validation Epoch 45: Loss=0.4315, F1 Score=0.7808
+2025-10-02 20:02:30,942 - INFO - Validation Epoch 46: Loss=0.4297, F1 Score=0.7819
+2025-10-02 20:03:19,364 - INFO - Validation Epoch 47: Loss=0.4266, F1 Score=0.7850
+2025-10-02 20:04:06,297 - INFO - Validation Epoch 48: Loss=0.4275, F1 Score=0.7851
+2025-10-02 20:04:54,360 - INFO - Validation Epoch 49: Loss=0.4239, F1 Score=0.7896
+2025-10-02 20:04:54,376 - INFO - Losses for run 'pcam_quantum_Q2_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 20:04:54,631 - INFO - Model backbone saved to models/model_backbone_pcam_quantum_Q2_20251002_183101.pt
+2025-10-02 20:06:02,513 - INFO - Latent visualization saved.
+2025-10-02 20:06:02,513 - INFO - 
+--- Starting run for **num_quantum_layers = 3** (Mode: Hybrid) ---
+2025-10-02 20:06:02,513 - INFO - Initializing model for dataset 'pcam' in quantum mode with 3 quantum layers
+2025-10-02 20:06:02,520 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 20:07:03,901 - INFO - Validation Epoch 0: Loss=0.4736, F1 Score=0.7634
+2025-10-02 20:08:04,369 - INFO - Validation Epoch 1: Loss=0.4443, F1 Score=0.7991
+2025-10-02 20:09:05,088 - INFO - Validation Epoch 2: Loss=0.4242, F1 Score=0.8022
+2025-10-02 20:10:04,661 - INFO - Validation Epoch 3: Loss=0.4610, F1 Score=0.7754
+2025-10-02 20:11:04,635 - INFO - Validation Epoch 4: Loss=0.4185, F1 Score=0.8067
+2025-10-02 20:12:04,826 - INFO - Validation Epoch 5: Loss=0.4187, F1 Score=0.8062
+2025-10-02 20:13:05,735 - INFO - Validation Epoch 6: Loss=0.4289, F1 Score=0.8032
+2025-10-02 20:14:05,877 - INFO - Validation Epoch 7: Loss=0.4252, F1 Score=0.7851
+2025-10-02 20:15:06,706 - INFO - Validation Epoch 8: Loss=0.4280, F1 Score=0.7980
+2025-10-02 20:16:06,342 - INFO - Validation Epoch 9: Loss=0.4281, F1 Score=0.7921
+2025-10-02 20:17:07,095 - INFO - Validation Epoch 10: Loss=0.4295, F1 Score=0.7838
+2025-10-02 20:18:06,780 - INFO - Validation Epoch 11: Loss=0.4213, F1 Score=0.8023
+2025-10-02 20:19:06,378 - INFO - Validation Epoch 12: Loss=0.4853, F1 Score=0.7154
+2025-10-02 20:20:06,272 - INFO - Validation Epoch 13: Loss=0.4409, F1 Score=0.7725
+2025-10-02 20:21:07,447 - INFO - Validation Epoch 14: Loss=0.4437, F1 Score=0.7669
+2025-10-02 20:22:07,818 - INFO - Validation Epoch 15: Loss=0.4157, F1 Score=0.7996
+2025-10-02 20:23:08,146 - INFO - Validation Epoch 16: Loss=0.4505, F1 Score=0.7557
+2025-10-02 20:24:08,322 - INFO - Validation Epoch 17: Loss=0.4505, F1 Score=0.7741
+2025-10-02 20:25:10,343 - INFO - Validation Epoch 18: Loss=0.4434, F1 Score=0.7644
+2025-10-02 20:26:12,137 - INFO - Validation Epoch 19: Loss=0.4484, F1 Score=0.7617
+2025-10-02 20:27:11,753 - INFO - Validation Epoch 20: Loss=0.4319, F1 Score=0.7821
+2025-10-02 20:28:11,957 - INFO - Validation Epoch 21: Loss=0.4358, F1 Score=0.7730
+2025-10-02 20:29:12,277 - INFO - Validation Epoch 22: Loss=0.4299, F1 Score=0.7806
+2025-10-02 20:30:12,628 - INFO - Validation Epoch 23: Loss=0.4395, F1 Score=0.7713
+2025-10-02 20:31:12,882 - INFO - Validation Epoch 24: Loss=0.4341, F1 Score=0.7720
+2025-10-02 20:32:12,840 - INFO - Validation Epoch 25: Loss=0.4328, F1 Score=0.7774
+2025-10-02 20:33:12,744 - INFO - Validation Epoch 26: Loss=0.4247, F1 Score=0.7781
+2025-10-02 20:34:13,192 - INFO - Validation Epoch 27: Loss=0.4154, F1 Score=0.7853
+2025-10-02 20:35:13,000 - INFO - Validation Epoch 28: Loss=0.4332, F1 Score=0.7759
+2025-10-02 20:36:13,487 - INFO - Validation Epoch 29: Loss=0.4352, F1 Score=0.7674
+2025-10-02 20:37:13,725 - INFO - Validation Epoch 30: Loss=0.4405, F1 Score=0.7683
+2025-10-02 20:38:14,371 - INFO - Validation Epoch 31: Loss=0.4231, F1 Score=0.7871
+2025-10-02 20:39:14,611 - INFO - Validation Epoch 32: Loss=0.4300, F1 Score=0.7753
+2025-10-02 20:40:14,879 - INFO - Validation Epoch 33: Loss=0.4247, F1 Score=0.7878
+2025-10-02 20:41:15,853 - INFO - Validation Epoch 34: Loss=0.4255, F1 Score=0.7821
+2025-10-02 20:42:15,831 - INFO - Validation Epoch 35: Loss=0.4136, F1 Score=0.7909
+2025-10-02 20:43:16,249 - INFO - Validation Epoch 36: Loss=0.4137, F1 Score=0.7941
+2025-10-02 20:44:16,743 - INFO - Validation Epoch 37: Loss=0.4114, F1 Score=0.8032
+2025-10-02 20:45:17,419 - INFO - Validation Epoch 38: Loss=0.4188, F1 Score=0.7939
+2025-10-02 20:46:17,372 - INFO - Validation Epoch 39: Loss=0.4208, F1 Score=0.7868
+2025-10-02 20:47:19,556 - INFO - Validation Epoch 40: Loss=0.4203, F1 Score=0.7867
+2025-10-02 20:48:20,137 - INFO - Validation Epoch 41: Loss=0.4144, F1 Score=0.7943
+2025-10-02 20:49:20,391 - INFO - Validation Epoch 42: Loss=0.4213, F1 Score=0.7866
+2025-10-02 20:50:21,337 - INFO - Validation Epoch 43: Loss=0.4207, F1 Score=0.7868
+2025-10-02 20:51:21,472 - INFO - Validation Epoch 44: Loss=0.4197, F1 Score=0.7877
+2025-10-02 20:52:21,670 - INFO - Validation Epoch 45: Loss=0.4210, F1 Score=0.7869
+2025-10-02 20:53:21,812 - INFO - Validation Epoch 46: Loss=0.4202, F1 Score=0.7874
+2025-10-02 20:54:21,753 - INFO - Validation Epoch 47: Loss=0.4192, F1 Score=0.7893
+2025-10-02 20:55:21,511 - INFO - Validation Epoch 48: Loss=0.4214, F1 Score=0.7848
+2025-10-02 20:56:22,249 - INFO - Validation Epoch 49: Loss=0.4205, F1 Score=0.7875
+2025-10-02 20:56:22,268 - INFO - Losses for run 'pcam_quantum_Q3_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 20:56:22,273 - INFO - Model backbone saved to models/model_backbone_pcam_quantum_Q3_20251002_183101.pt
+2025-10-02 20:57:23,995 - INFO - Latent visualization saved.
+2025-10-02 20:57:23,995 - INFO - 
+--- Starting run for **num_quantum_layers = 4** (Mode: Hybrid) ---
+2025-10-02 20:57:23,995 - INFO - Initializing model for dataset 'pcam' in quantum mode with 4 quantum layers
+2025-10-02 20:57:24,003 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 20:58:41,560 - INFO - Validation Epoch 0: Loss=0.4440, F1 Score=0.7916
+2025-10-02 20:59:55,266 - INFO - Validation Epoch 1: Loss=0.4294, F1 Score=0.8080
+2025-10-02 21:01:09,738 - INFO - Validation Epoch 2: Loss=0.4208, F1 Score=0.8069
+2025-10-02 21:02:24,195 - INFO - Validation Epoch 3: Loss=0.4319, F1 Score=0.7980
+2025-10-02 21:03:38,898 - INFO - Validation Epoch 4: Loss=0.4318, F1 Score=0.7917
+2025-10-02 21:04:51,981 - INFO - Validation Epoch 5: Loss=0.4341, F1 Score=0.7916
+2025-10-02 21:06:06,008 - INFO - Validation Epoch 6: Loss=0.4349, F1 Score=0.8048
+2025-10-02 21:07:19,950 - INFO - Validation Epoch 7: Loss=0.4247, F1 Score=0.8104
+2025-10-02 21:08:33,341 - INFO - Validation Epoch 8: Loss=0.4332, F1 Score=0.7949
+2025-10-02 21:09:48,299 - INFO - Validation Epoch 9: Loss=0.4466, F1 Score=0.7670
+2025-10-02 21:11:03,299 - INFO - Validation Epoch 10: Loss=0.4288, F1 Score=0.7904
+2025-10-02 21:12:17,329 - INFO - Validation Epoch 11: Loss=0.4216, F1 Score=0.8029
+2025-10-02 21:13:31,476 - INFO - Validation Epoch 12: Loss=0.4682, F1 Score=0.7562
+2025-10-02 21:14:45,171 - INFO - Validation Epoch 13: Loss=0.4259, F1 Score=0.7852
+2025-10-02 21:16:02,655 - INFO - Validation Epoch 14: Loss=0.4262, F1 Score=0.7905
+2025-10-02 21:17:17,196 - INFO - Validation Epoch 15: Loss=0.4339, F1 Score=0.7724
+2025-10-02 21:18:31,828 - INFO - Validation Epoch 16: Loss=0.4128, F1 Score=0.8010
+2025-10-02 21:19:46,163 - INFO - Validation Epoch 17: Loss=0.4198, F1 Score=0.7996
+2025-10-02 21:20:59,579 - INFO - Validation Epoch 18: Loss=0.4419, F1 Score=0.7686
+2025-10-02 21:22:13,347 - INFO - Validation Epoch 19: Loss=0.4388, F1 Score=0.7878
+2025-10-02 21:23:29,238 - INFO - Validation Epoch 20: Loss=0.4207, F1 Score=0.7886
+2025-10-02 21:24:43,322 - INFO - Validation Epoch 21: Loss=0.4286, F1 Score=0.7800
+2025-10-02 21:25:57,834 - INFO - Validation Epoch 22: Loss=0.4299, F1 Score=0.7879
+2025-10-02 21:27:11,963 - INFO - Validation Epoch 23: Loss=0.4268, F1 Score=0.7779
+2025-10-02 21:28:25,973 - INFO - Validation Epoch 24: Loss=0.4197, F1 Score=0.7960
+2025-10-02 21:29:39,674 - INFO - Validation Epoch 25: Loss=0.4462, F1 Score=0.7717
+2025-10-02 21:30:54,358 - INFO - Validation Epoch 26: Loss=0.4293, F1 Score=0.7855
+2025-10-02 21:32:08,272 - INFO - Validation Epoch 27: Loss=0.4211, F1 Score=0.7885
+2025-10-02 21:33:22,294 - INFO - Validation Epoch 28: Loss=0.4241, F1 Score=0.7958
+2025-10-02 21:34:37,169 - INFO - Validation Epoch 29: Loss=0.4217, F1 Score=0.7918
+2025-10-02 21:35:50,807 - INFO - Validation Epoch 30: Loss=0.4240, F1 Score=0.7950
+2025-10-02 21:37:05,766 - INFO - Validation Epoch 31: Loss=0.4245, F1 Score=0.7903
+2025-10-02 21:38:18,759 - INFO - Validation Epoch 32: Loss=0.4235, F1 Score=0.7872
+2025-10-02 21:39:34,289 - INFO - Validation Epoch 33: Loss=0.4334, F1 Score=0.7845
+2025-10-02 21:40:49,447 - INFO - Validation Epoch 34: Loss=0.4243, F1 Score=0.7905
+2025-10-02 21:42:02,801 - INFO - Validation Epoch 35: Loss=0.4420, F1 Score=0.7786
+2025-10-02 21:43:16,324 - INFO - Validation Epoch 36: Loss=0.4307, F1 Score=0.7917
+2025-10-02 21:44:31,028 - INFO - Validation Epoch 37: Loss=0.4289, F1 Score=0.7847
+2025-10-02 21:45:45,795 - INFO - Validation Epoch 38: Loss=0.4276, F1 Score=0.7874
+2025-10-02 21:47:00,247 - INFO - Validation Epoch 39: Loss=0.4208, F1 Score=0.7927
+2025-10-02 21:48:15,354 - INFO - Validation Epoch 40: Loss=0.4316, F1 Score=0.7895
+2025-10-02 21:49:29,220 - INFO - Validation Epoch 41: Loss=0.4301, F1 Score=0.7854
+2025-10-02 21:50:44,966 - INFO - Validation Epoch 42: Loss=0.4321, F1 Score=0.7832
+2025-10-02 21:51:58,641 - INFO - Validation Epoch 43: Loss=0.4273, F1 Score=0.7887
+2025-10-02 21:53:12,009 - INFO - Validation Epoch 44: Loss=0.4255, F1 Score=0.7887
+2025-10-02 21:54:25,675 - INFO - Validation Epoch 45: Loss=0.4289, F1 Score=0.7860
+2025-10-02 21:55:40,368 - INFO - Validation Epoch 46: Loss=0.4239, F1 Score=0.7910
+2025-10-02 21:56:55,586 - INFO - Validation Epoch 47: Loss=0.4277, F1 Score=0.7878
+2025-10-02 21:58:09,838 - INFO - Validation Epoch 48: Loss=0.4244, F1 Score=0.7905
+2025-10-02 21:59:23,342 - INFO - Validation Epoch 49: Loss=0.4290, F1 Score=0.7857
+2025-10-02 21:59:23,361 - INFO - Losses for run 'pcam_quantum_Q4_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 21:59:26,215 - INFO - Model backbone saved to models/model_backbone_pcam_quantum_Q4_20251002_183101.pt
+2025-10-02 22:00:29,739 - INFO - Latent visualization saved.
+2025-10-02 22:00:29,739 - INFO - 
+--- Starting run for **num_quantum_layers = 5** (Mode: Hybrid) ---
+2025-10-02 22:00:29,739 - INFO - Initializing model for dataset 'pcam' in quantum mode with 5 quantum layers
+2025-10-02 22:00:29,746 - INFO - Using Binary Cross-Entropy loss for PCAM.
+2025-10-02 22:01:58,248 - INFO - Validation Epoch 0: Loss=0.4405, F1 Score=0.8143
+2025-10-02 22:03:31,251 - INFO - Validation Epoch 1: Loss=0.4290, F1 Score=0.8058
+2025-10-02 22:04:58,269 - INFO - Validation Epoch 2: Loss=0.4566, F1 Score=0.7706
+2025-10-02 22:06:26,075 - INFO - Validation Epoch 3: Loss=0.4466, F1 Score=0.7856
+2025-10-02 22:07:54,566 - INFO - Validation Epoch 4: Loss=0.4430, F1 Score=0.7881
+2025-10-02 22:09:23,928 - INFO - Validation Epoch 5: Loss=0.4407, F1 Score=0.7996
+2025-10-02 22:10:51,924 - INFO - Validation Epoch 6: Loss=0.4200, F1 Score=0.8055
+2025-10-02 22:12:19,452 - INFO - Validation Epoch 7: Loss=0.4439, F1 Score=0.7872
+2025-10-02 22:13:47,267 - INFO - Validation Epoch 8: Loss=0.4389, F1 Score=0.7884
+2025-10-02 22:15:15,428 - INFO - Validation Epoch 9: Loss=0.4370, F1 Score=0.7955
+2025-10-02 22:16:43,267 - INFO - Validation Epoch 10: Loss=0.4378, F1 Score=0.7904
+2025-10-02 22:18:10,439 - INFO - Validation Epoch 11: Loss=0.4223, F1 Score=0.8066
+2025-10-02 22:19:37,696 - INFO - Validation Epoch 12: Loss=0.4265, F1 Score=0.7915
+2025-10-02 22:21:04,775 - INFO - Validation Epoch 13: Loss=0.4198, F1 Score=0.8119
+2025-10-02 22:22:37,629 - INFO - Validation Epoch 14: Loss=0.4285, F1 Score=0.7872
+2025-10-02 22:24:06,474 - INFO - Validation Epoch 15: Loss=0.4573, F1 Score=0.7609
+2025-10-02 22:25:33,573 - INFO - Validation Epoch 16: Loss=0.4204, F1 Score=0.7982
+2025-10-02 22:27:01,187 - INFO - Validation Epoch 17: Loss=0.4377, F1 Score=0.7867
+2025-10-02 22:28:28,756 - INFO - Validation Epoch 18: Loss=0.4031, F1 Score=0.8219
+2025-10-02 22:29:57,106 - INFO - Validation Epoch 19: Loss=0.4254, F1 Score=0.7934
+2025-10-02 22:31:24,658 - INFO - Validation Epoch 20: Loss=0.4208, F1 Score=0.8152
+2025-10-02 22:32:58,157 - INFO - Validation Epoch 21: Loss=0.4296, F1 Score=0.7997
+2025-10-02 22:34:25,125 - INFO - Validation Epoch 22: Loss=0.4578, F1 Score=0.7603
+2025-10-02 22:35:53,072 - INFO - Validation Epoch 23: Loss=0.4341, F1 Score=0.7858
+2025-10-02 22:37:20,135 - INFO - Validation Epoch 24: Loss=0.4210, F1 Score=0.8009
+2025-10-02 22:38:47,382 - INFO - Validation Epoch 25: Loss=0.4338, F1 Score=0.7938
+2025-10-02 22:40:15,532 - INFO - Validation Epoch 26: Loss=0.4385, F1 Score=0.7893
+2025-10-02 22:41:42,825 - INFO - Validation Epoch 27: Loss=0.4306, F1 Score=0.7966
+2025-10-02 22:43:10,854 - INFO - Validation Epoch 28: Loss=0.4539, F1 Score=0.7642
+2025-10-02 22:44:38,640 - INFO - Validation Epoch 29: Loss=0.4307, F1 Score=0.7951
+2025-10-02 22:46:06,432 - INFO - Validation Epoch 30: Loss=0.4304, F1 Score=0.7956
+2025-10-02 22:47:33,921 - INFO - Validation Epoch 31: Loss=0.4564, F1 Score=0.7700
+2025-10-02 22:49:06,323 - INFO - Validation Epoch 32: Loss=0.4348, F1 Score=0.7896
+2025-10-02 22:50:35,641 - INFO - Validation Epoch 33: Loss=0.4367, F1 Score=0.7871
+2025-10-02 22:52:02,868 - INFO - Validation Epoch 34: Loss=0.4294, F1 Score=0.7938
+2025-10-02 22:53:30,080 - INFO - Validation Epoch 35: Loss=0.4258, F1 Score=0.8019
+2025-10-02 22:54:57,248 - INFO - Validation Epoch 36: Loss=0.4372, F1 Score=0.7930
+2025-10-02 22:56:24,872 - INFO - Validation Epoch 37: Loss=0.4352, F1 Score=0.7884
+2025-10-02 22:57:52,990 - INFO - Validation Epoch 38: Loss=0.4405, F1 Score=0.7872
+2025-10-02 22:59:20,695 - INFO - Validation Epoch 39: Loss=0.4428, F1 Score=0.7787
+2025-10-02 23:00:48,973 - INFO - Validation Epoch 40: Loss=0.4324, F1 Score=0.7959
+2025-10-02 23:02:16,728 - INFO - Validation Epoch 41: Loss=0.4349, F1 Score=0.7897
+2025-10-02 23:03:44,137 - INFO - Validation Epoch 42: Loss=0.4310, F1 Score=0.7946
+2025-10-02 23:05:11,395 - INFO - Validation Epoch 43: Loss=0.4350, F1 Score=0.7887
+2025-10-02 23:06:39,052 - INFO - Validation Epoch 44: Loss=0.4319, F1 Score=0.7937
+2025-10-02 23:08:06,373 - INFO - Validation Epoch 45: Loss=0.4326, F1 Score=0.7925
+2025-10-02 23:09:33,618 - INFO - Validation Epoch 46: Loss=0.4338, F1 Score=0.7925
+2025-10-02 23:11:01,635 - INFO - Validation Epoch 47: Loss=0.4342, F1 Score=0.7903
+2025-10-02 23:12:29,208 - INFO - Validation Epoch 48: Loss=0.4297, F1 Score=0.7960
+2025-10-02 23:13:56,133 - INFO - Validation Epoch 49: Loss=0.4342, F1 Score=0.7906
+2025-10-02 23:13:56,152 - INFO - Losses for run 'pcam_quantum_Q5_20251002_183101' have been logged to logs/training_log.csv
+2025-10-02 23:13:56,199 - INFO - Model backbone saved to models/model_backbone_pcam_quantum_Q5_20251002_183101.pt
+2025-10-02 23:15:04,261 - INFO - Latent visualization saved.
+2025-10-02 23:15:04,261 - INFO - 
+====================================
+2025-10-02 23:15:04,261 - INFO - All training runs complete.
+2025-10-02 23:15:04,261 - INFO - ====================================
+2025-10-02 23:15:04,261 - INFO - Losses collected for 6 runs: [0, 1, 2, 3, 4, 5] quantum layers.
+2025-10-02 23:15:04,262 - INFO - Generating aggregate loss plot and saving to results/aggregate_loss_plot_pcam_20251002_183101.png
+2025-10-02 23:15:04,736 - INFO - Aggregate loss plot successfully saved to: results/aggregate_loss_plot_pcam_20251002_183101.png

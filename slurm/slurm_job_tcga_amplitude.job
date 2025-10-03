@@ -3,8 +3,8 @@
 #SBATCH --time=01:00:00
 #SBATCH --partition gpu_a100
 #SBATCH --gpus 1
-#SBATCH --output=slurm-tcga-angle.out
-#SBATCH --error=slurm-tcga-angle.err
+#SBATCH --output=slurm-tcga-amplitude.out
+#SBATCH --error=slurm-tcga-amplitude.err
 
 # Default to 'classical' if no mode is provided
 MODE=${1:-quantum}
@@ -17,4 +17,3 @@ source venv/bin/activate
 
 # execution script
 python src/train.py --config configs/config.yaml --mode $MODE
-

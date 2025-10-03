@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from pathlib import Path
-from torch.optim import Adam
+from torch.optim import Adam, AdamW, AMSGrad, AdaBound
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -15,11 +15,8 @@ from torcheval.metrics import Throughput
 from argparse import ArgumentParser
 import logging
 from datetime import datetime
-
-# --- New Imports for Plotting ---
+from tqdm import tqdm
 import matplotlib.pyplot as plt
-# ------------------------------
-
 from data.datasets import get_dataloaders
 from model.models import HybridClassifier
 from utils.functions import visualize_latents, log_losses_to_csv
@@ -62,6 +59,28 @@ def train_epoch(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, 
         optimizer.step()
 
         losses.append(loss.item())
+
+
+        if hasattr(model.head, 'q_params'):
+            q_params_tensor = model.head.q_params.data.cpu()
+            current_angles = q_params_tensor.numpy()
+
+            # Log individual angle values
+            # Flatten the tensor to iterate over all angles regardless of shape (N_layers, N_qubits, 3)
+            for j, angle in enumerate(current_angles.flatten()):
+                writer.add_scalar(
+                    f'Train/Q_Angle_{j}',
+                    angle,
+                    epoch * len(dataloader) + i
+                )
+
+            # Log the magnitude (L2-norm) of the parameter vector
+            angle_magnitude = torch.linalg.norm(q_params_tensor)
+            writer.add_scalar(
+                'Train/Q_Angle_Magnitude',
+                angle_magnitude.item(),
+                epoch * len(dataloader) + i
+            )
 
         if i % 100 == 0 and i > 0:
             throughput.update(i * config['training']['batch_size'], time.monotonic() - start)
@@ -116,7 +135,6 @@ def validate(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, epo
     return avg_val_loss
 
 
-# --- New Function to Plot All Results ---
 def plot_all_runs_losses(all_runs_losses: dict, dataset_type: str, timestamp: str, save_path: Path):
     """
     Plots the training and validation loss curves for all configurations (0 to max_num_of_quantum layers).
@@ -131,34 +149,25 @@ def plot_all_runs_losses(all_runs_losses: dict, dataset_type: str, timestamp: st
 
     logger.info(f"Generating aggregate loss plot and saving to {save_path}")
 
-    # Determine the number of epochs (assumes all runs have the same number of epochs)
     num_epochs = len(next(iter(all_runs_losses.values()))[0])
     epochs = range(1, num_epochs + 1)
 
     fig, ax = plt.subplots(figsize=(12, 6))
-
-    # Determine colors for plotting (using a colormap for distinct lines)
     colors = plt.cm.viridis(np.linspace(0, 1, len(all_runs_losses)))
-
-    # Sort keys for consistent plotting order
     sorted_keys = sorted(all_runs_losses.keys())
 
     for i, n_layers in enumerate(sorted_keys):
         train_losses, val_losses = all_runs_losses[n_layers]
-
-        # Determine label for the run
         label_base = f'{n_layers} Q Layers'
         if n_layers == 0:
             label_base = 'Classical (0 Q Layers)'
 
-        # Plot Training Loss
         ax.plot(epochs, train_losses,
                 label=f'{label_base} - Train Loss',
                 linestyle='-',
                 linewidth=1.5,
                 color=colors[i])
 
-        # Plot Validation Loss
         ax.plot(epochs, val_losses,
                 label=f'{label_base} - Val Loss',
                 linestyle='--',
@@ -171,18 +180,13 @@ def plot_all_runs_losses(all_runs_losses: dict, dataset_type: str, timestamp: st
     ax.legend(loc='upper right', ncol=2, fontsize=8)
     ax.grid(True, which='both', linestyle='-')
 
-    # Save the figure
     try:
         plt.savefig(save_path)
         logger.info(f"Aggregate loss plot successfully saved to: {save_path}")
     except Exception as e:
         logger.error(f"Error saving plot: {e}")
     finally:
-        plt.close(fig)  # Close the figure to free memory
-
-
-# ----------------------------------------
-
+        plt.close(fig)
 
 def main():
     parser = ArgumentParser()
@@ -193,40 +197,27 @@ def main():
     config = load_config(args.config)
     dataset_type = config.get('dataset_type', 'pcam')
 
-    # Define run name and log file path
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filepath = Path("./logs/training_log.csv")
     log_filepath.parent.mkdir(exist_ok=True)
     max_num_of_quantum = 5
 
-    # FIX: Correctly set use_quantum to a boolean based on the argument
     use_quantum_mode = args.mode == 'quantum'
     use_quantum = 'quantum'
-
-    # Initialize a dictionary to store all losses for plotting later
-    # Key: num_quantum_layers (0 to max_num_of_quantum), Value: (train_losses, val_losses)
     all_runs_losses = {}
 
     for n_quantum_layers in range(max_num_of_quantum + 1):
-
-        # Only proceed if we are in 'quantum' mode OR if n_quantum_layers is 0 (classical)
         if not use_quantum_mode and n_quantum_layers > 0:
             logger.info(f"Skipping run for {n_quantum_layers} Q Layers as mode is 'classical'.")
             continue  # Skip runs with quantum layers if mode is 'classical'
 
         current_num_quantum_layers = n_quantum_layers
-
-        # Set the boolean flag for the model constructor
         current_use_quantum = current_num_quantum_layers > 0
-
-        # Define run name unique to this configuration
         mode_str = 'classical' if current_num_quantum_layers == 0 else 'quantum'
-        run_name = f"{dataset_type}_{mode_str}_Q{current_num_quantum_layers}_{timestamp}"
+        run_name = f"{dataset_type}_{mode_str}_Q{current_num_quantum_layers}_{config['model']['quantum_head_type']}_{timestamp}"
 
         logger.info(
             f"\n--- Starting run for **num_quantum_layers = {current_num_quantum_layers}** (Mode: {'Hybrid' if current_use_quantum else 'Classical'}) ---")
-
-        # 1. Initialize the Model for the current iteration
         logger.info(
             f"Initializing model for dataset '{dataset_type}' in {'quantum' if current_use_quantum else 'classical'} mode with {current_num_quantum_layers} quantum layers")
 
@@ -234,14 +225,10 @@ def main():
         model = HybridClassifier(config=config, use_quantum=current_use_quantum,
                                  num_quantum_layers=current_num_quantum_layers)
         model.to(device)
-
-        # 2. Loading data (can be moved outside the loop if data is static and memory is a concern)
         logger.debug("Loading data...")
         train_loader, val_loader = get_dataloaders(config)
-
-        # 3. Setup optimizer, scheduler, and loss function (must be re-initialized for a new model)
-        optimizer = Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=config['training']['lr'])
-        scheduler = CosineAnnealingLR(optimizer, T_max=config['training']['epochs'])
+        optimizer = AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=config['training']['lr'], weight_decay=1e-5)
+        scheduler = CosineAnnealingLR(optimizer, T_max=100)
 
         if dataset_type == 'pcam':
             criterion = nn.BCEWithLogitsLoss()
@@ -254,7 +241,6 @@ def main():
         train_epoch_losses = []
         val_epoch_losses = []
 
-        # 4. Training Loop (same as original code)
         for epoch in range(config['training']['epochs']):
             avg_train_loss = train_epoch(model, train_loader, criterion, optimizer, scheduler, epoch, config, writer)
             avg_val_loss = validate(model, val_loader, criterion, epoch, config, writer)
@@ -283,8 +269,6 @@ def main():
         logger.info("Latent visualization saved.")
 
         writer.close()
-
-        # 6. Save the losses for the current run
         all_runs_losses[current_num_quantum_layers] = (train_epoch_losses, val_epoch_losses)
 
     logger.info("\n====================================")
@@ -292,11 +276,10 @@ def main():
     logger.info("====================================")
     logger.info(f"Losses collected for {len(all_runs_losses)} runs: {list(all_runs_losses.keys())} quantum layers.")
 
-    # --- Call the new plotting function here ---
     plot_save_path = Path(f"./results/aggregate_loss_plot_{dataset_type}_{timestamp}.png")
     plot_save_path.parent.mkdir(exist_ok=True)
     plot_all_runs_losses(all_runs_losses, dataset_type, timestamp, plot_save_path)
-    # ------------------------------------------
+
 
 
 if __name__ == "__main__":
