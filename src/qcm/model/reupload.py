@@ -16,9 +16,10 @@ class QuantumHeadReupload(nn.Module):
                  entangling_layer: str = 'strong'):
         
         super().__init__()
+
         self.n_qubits = input_shape[0]
         self.num_features_per_qubits = input_shape[1]
-        self.n_input_blocs = -(len(self.num_features_per_qubits)//-3)
+        self.n_input_blocs = -(self.num_features_per_qubits//-3)
         self.num_classes = num_classes
         self.n_repetitions = n_repetitions 
         self.expected_latent_dim = input_shape
@@ -27,7 +28,7 @@ class QuantumHeadReupload(nn.Module):
                                                  3 * self.n_repetitions))
         self.etangling_layer = entangling_layer
         
-        self.target_states = self.get_classes_state()
+        self.target_states = self.get_target_states()
         self.target_density_matrices = torch.stack([compute_density_matrix(s) 
                                                     for s in self.target_states]) 
        
@@ -54,12 +55,12 @@ class QuantumHeadReupload(nn.Module):
                 for iqubit in range(self.n_qubits):
                     ctrl = iqubit
                     target = (iqubit+1) % self.n_qubits
-                    qml.CNOT(ctrl, target)
+                    qml.CNOT(wires=[ctrl, target])
             return qml.expval(qml.Hermitian(y, wires=range(self.n_qubits)))     
         
         self.circuit = circuit
 
-    def get_target_state(self):
+    def get_target_states(self):
         if self.num_classes == 2 :
             
             zeros = torch.zeros(2**self.n_qubits)
@@ -97,7 +98,7 @@ class HybridReuploadClassifier(nn.Module):
                 latent_dim=model_cfg['latent_dim'], 
                 filters=model_cfg['pcam_filters']
             )
-            num_classes = 1
+            num_classes = 2
         elif dataset_type == 'tcga':
             self.backbone = TCGABackbone(
                 input_dim = 768, 

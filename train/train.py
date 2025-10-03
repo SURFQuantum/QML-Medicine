@@ -16,10 +16,9 @@ from argparse import ArgumentParser
 import logging
 from datetime import datetime
 
-from data.datasets import get_dataloaders
-from model.reupload import HybridReuploadClassifier # Updated model import
-from utils.functions import visualize_latents, log_losses_to_csv
-from utils.algebra import compute_density_matrix
+from qcm.data.datasets import get_dataloaders
+from qcm.model.models import HybridClassifier # Updated model import
+from qcm.utils.functions import visualize_latents, log_losses_to_csv
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -28,22 +27,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-def criterion(output):
-    return (1-output)**2
-
 
 def load_config(path: str) -> dict:
     logger.info(f"Loading config from: {path}")
     with open(path, 'r') as f:
         return yaml.safe_load(f)
 
-def train_epoch(model: nn.Module, 
-                dataloader: DataLoader, 
-                optimizer: torch.optim.Optimizer, 
-                scheduler, 
-                epoch: int, 
-                config: dict, 
-                writer: SummaryWriter):
+
+def train_epoch(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, optimizer: torch.optim.Optimizer, scheduler, epoch: int, config: dict, writer: SummaryWriter):
     logger.info(f"Starting training epoch {epoch}")
     model.train()
     losses = []
@@ -54,13 +45,12 @@ def train_epoch(model: nn.Module,
         # Adapt label type for loss function
         if config['dataset_type'] == 'pcam':
             x, y = x.to(device), y.float().to(device)
-            output = model(x, y).squeeze(1)
-            loss = criterion(output)
-
+            output = model(x).squeeze(1)
+            loss = criterion(output, y.squeeze())
         else: # tcga
             x, y = x.to(device), y.long().to(device)
-            output = model(x, y)
-            loss = criterion(output)
+            output = model(x)
+            loss = criterion(output, y)
 
         optimizer.zero_grad()
         loss.backward()
@@ -79,11 +69,7 @@ def train_epoch(model: nn.Module,
     return np.mean(losses)
 
 
-def validate(model: nn.Module, 
-             dataloader: DataLoader, 
-             epoch: int, 
-             config: dict, 
-             writer: SummaryWriter):
+def validate(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, epoch: int, config: dict, writer: SummaryWriter):
     logger.info(f"Starting validation for epoch {epoch}")
     model.eval()
     val_losses = []
@@ -101,14 +87,14 @@ def validate(model: nn.Module,
         for x, y in dataloader:
             if config['dataset_type'] == 'pcam':
                 x, y = x.to(device), y.squeeze().float().to(device)
-                output = model(x, y).squeeze(1)
+                output = model(x).squeeze(1)
                 pred = torch.sigmoid(output) > 0.5
-                val_loss = criterion(output)
+                val_loss = criterion(output, y)
             else: # tcga
                 x, y = x.to(device), y.long().to(device)
-                output = model(x, y)
+                output = model(x)
                 pred = torch.argmax(output, dim=1)
-                val_loss = criterion(output)
+                val_loss = criterion(output, y)
             
             metric.update(pred, y)
             val_losses.append(val_loss.item())
@@ -140,7 +126,7 @@ def main():
 
     use_quantum = args.mode == 'quantum'
     logger.info(f"Initializing model for dataset '{dataset_type}' in {'quantum' if use_quantum else 'classical'} mode")
-    model = HybridReuploadClassifier(config=config, use_quantum=use_quantum)
+    model = HybridClassifier(config=config, use_quantum=use_quantum)
     model.to(device)
     
     logger.info("Loading data...")
@@ -150,15 +136,20 @@ def main():
     optimizer = Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=config['training']['lr'])
     scheduler = CosineAnnealingLR(optimizer, T_max=config['training']['epochs'])
 
-    logger.info(f"Using Fidelity loss for {dataset_type}.")
+    if dataset_type == 'pcam':
+        criterion = nn.BCEWithLogitsLoss()
+        logger.info("Using Binary Cross-Entropy loss for PCAM.")
+    else: # tcga
+        criterion = nn.CrossEntropyLoss()
+        logger.info("Using Cross-Entropy loss for TCGA.")
 
     writer = SummaryWriter(log_dir=f"runs/{run_name}")
     train_epoch_losses = []
     val_epoch_losses = []
 
     for epoch in range(config['training']['epochs']):
-        avg_train_loss = train_epoch(model, train_loader, optimizer, scheduler, epoch, config, writer)
-        avg_val_loss = validate(model, val_loader, epoch, config, writer)
+        avg_train_loss = train_epoch(model, train_loader, criterion, optimizer, scheduler, epoch, config, writer)
+        avg_val_loss = validate(model, val_loader, criterion, epoch, config, writer)
         
         train_epoch_losses.append(avg_train_loss)
         val_epoch_losses.append(avg_val_loss)
