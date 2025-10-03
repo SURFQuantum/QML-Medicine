@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.func import vmap 
 import pennylane as qml
 import pennylane.numpy as np
-
+from functools import partial
 from .models import PCAMBackbone, TCGABackbone, ClassicalHead
 from ..utils.algebra import compute_density_matrix
 
@@ -33,6 +33,7 @@ class QuantumHeadReupload(nn.Module):
                                                     for s in self.target_states]) 
        
         dev = qml.device("default.qubit", wires=self.n_qubits)
+
         @qml.qnode(dev, interface="torch", diff_method="backprop")
         def circuit(inputs, q_params_, y):
             """A variational quantum circuit representing the Universal classifier.
@@ -63,25 +64,37 @@ class QuantumHeadReupload(nn.Module):
     def get_target_states(self):
         if self.num_classes == 2 :
             
-            zeros = torch.zeros(2**self.n_qubits)
+            zeros = torch.zeros(2**self.n_qubits, 1)
             zeros[0] = 1
 
-            ones = torch.zeros(2**self.n_qubits)
+            ones = torch.zeros(2**self.n_qubits, 1)
             ones[-1] = 1
 
             return torch.stack((zeros, ones))
         else:
             raise ValueError("Reupload only works with two classes so far")
 
+
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        # input_dim = x.shape[1:]
-        # if input_dim != self.expected_latent_dim:
-        #     raise ValueError(
-        #         f"Input dimension ({input_dim}) must match required latent dim "
-        #         f"({self.expected_latent_dim}) for Reuploading."
-        #     )
-        dm_y = compute_density_matrix(y)
-        return self.circuit(x, self.q_params, dm_y)
+        input_dim = x.shape[1]
+        if input_dim % ( 3 * self.n_qubits):
+            raise ValueError(
+                f"Input dimension ({input_dim}) must must be a multiple of "
+                f"(3 * n_qubits = = 3 * {self.n_qubits} = {3 * self.n_qubits}) for Reuploading."
+                f"Adapt the latent dimensions to: {3 * self.n_qubits}, {6 * self.n_qubits}, {9 * self.n_qubits}, ... "
+            )
+
+        def criterion(output):
+            return (1-output)**2
+        
+        nbatch = x.shape[0]
+        dm_y = self.target_density_matrices[y.int()].squeeze()
+        # out = torch.zeros(nbatch).requires_grad_(True)
+        loss = 0.0
+        for isample in range(nbatch):
+            fidelity = self.circuit(x[isample], self.q_params, dm_y[isample])
+            loss = loss + criterion(fidelity)
+        return loss / nbatch
 
 # =============================================================================
 # Main Classifier

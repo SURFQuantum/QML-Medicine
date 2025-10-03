@@ -2,11 +2,11 @@
 dataset_type: 'pcam' 
 
 pcam_data:
-  path: "./src/data/pcam"
+  path: "../data/pcam"
 
 tcga_data:
-  pickle_path: "./src/data/tcga/tcga_titan_embeddings_reports.pkl"
-  csv_path: "./src/data/tcga/tcga_patient_to_cancer_type.csv"
+  pickle_path: "../data/tcga/tcga_titan_embeddings_reports.pkl"
+  csv_path: "../data/tcga/tcga_patient_to_cancer_type.csv"
   val_split: 0.1 # 20% of data for validation
 
 model:
@@ -31,4 +31,4 @@ training:
   batch_size: 512
   lr: 0.0006
   epochs: 50
-  num_workers: 8
+  num_workers: 0

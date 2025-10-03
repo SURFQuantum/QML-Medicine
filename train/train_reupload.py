@@ -28,8 +28,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-def criterion(output):
-    return (1-output)**2
+
 
 
 def load_config(path: str) -> dict:
@@ -54,13 +53,11 @@ def train_epoch(model: nn.Module,
         # Adapt label type for loss function
         if config['dataset_type'] == 'pcam':
             x, y = x.to(device), y.float().to(device)
-            output = model(x, y).squeeze(1)
-            loss = criterion(output)
+            loss = model(x, y)
 
         else: # tcga
             x, y = x.to(device), y.long().to(device)
-            output = model(x, y)
-            loss = criterion(output)
+            loss = model(x, y)
 
         optimizer.zero_grad()
         loss.backward()
