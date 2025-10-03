@@ -51,6 +51,8 @@ class ClassicalHead(nn.Module):
         self.out = nn.Linear(latent_dim, num_classes)
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.out(x)
+    
+
 
 class QuantumHeadAngle(nn.Module):
     def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong'):
