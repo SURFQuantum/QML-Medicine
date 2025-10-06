@@ -175,4 +175,4 @@ cython_debug/
 data/
 
 # tensorflow events
-*events.out.tfevents
+*events.out.tfevents.*
