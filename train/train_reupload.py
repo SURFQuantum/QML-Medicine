@@ -29,8 +29,17 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
-
-
+def compute_prediction_metric(model, x):
+    with torch.no_grad():        
+        nbatch = x.shape[0]
+        nstate = model.head.num_classes
+        target_labels = model.head.target_labels.reshape(1, -1)
+        x = torch.repeat_interleave(x, nstate, dim=0)
+        y = torch.repeat_interleave(target_labels, nbatch, dim=0).reshape(-1 ,1)
+        output = model(x, y).reshape(-1, nstate)
+        val_loss, pred = output.min(dim=1) 
+        return val_loss, pred
+    
 def load_config(path: str) -> dict:
     logger.info(f"Loading config from: {path}")
     with open(path, 'r') as f:
@@ -43,36 +52,39 @@ def train_epoch(model: nn.Module,
                 epoch: int, 
                 config: dict, 
                 writer: SummaryWriter):
+    
+    metric_train = BinaryF1Score().to(device)
+    metric_name = "F1 Score"
     logger.info(f"Starting training epoch {epoch}")
     model.train()
     losses = []
     throughput = Throughput()
     start = time.monotonic()
 
+    logger.info(f"Epoch {epoch} START")
     for i, (x, y) in enumerate(dataloader):
-        # Adapt label type for loss function
-        if config['dataset_type'] == 'pcam':
-            x, y = x.to(device), y.float().to(device)
-            loss = model(x, y).mean()
 
-        else: # tcga
-            x, y = x.to(device), y.long().to(device)
-            loss = model(x, y).mean()
+        x, y = x.to(device), y.long().to(device)
+        _, pred = compute_prediction_metric(model, x) 
+        metric_train.update(pred, y)
+        loss = model(x, y).mean()
 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
         losses.append(loss.item())
-
+        
         if i % 100 == 0 and i > 0:
             throughput.update(i * config['training']['batch_size'], time.monotonic() - start)
             writer.add_scalar('Train/Loss', np.mean(losses[-100:]), epoch * len(dataloader) + i)
             writer.add_scalar('Train/Throughput', throughput.compute(), epoch * len(dataloader) + i)
-            logger.info(f"Epoch {epoch}, Step {i}: Loss={loss.item():.4f}, Throughput={throughput.compute():.2f} items/sec")
+            logger.info(f"Epoch {epoch}, Step {i}: Loss={loss.item():.4f}")
 
+    metric_train_val = metric_train.compute()
+    logger.info(f"Epoch {epoch} END: Loss={loss.item():.4f}, {metric_name}={metric_train_val.item():.4f}")
     scheduler.step()
-    logger.info(f"Finished training epoch {epoch}. Avg Loss: {np.mean(losses):.4f}")
+    logger.info(f"Finished training epoch {epoch}. Avg Loss: {np.mean(losses):.4f}, Accuracy: {metric_train_val.item():.4f}")
     return np.mean(losses)
 
 
@@ -86,37 +98,14 @@ def validate(model: nn.Module,
     val_losses = []
     
     # Select metric based on dataset type
-    if config['dataset_type'] == 'pcam':
-        metric = BinaryF1Score().to(device)
-        metric_name = "F1 Score"
-    else: # tcga
-        num_classes = config['model']['num_classes']
-        metric = MulticlassAccuracy(num_classes=num_classes).to(device)
-        metric_name = "Accuracy"
+    metric = BinaryF1Score().to(device)
+    metric_name = "F1 Score"
 
     with torch.no_grad():
         for x, y in dataloader:
-            if config['dataset_type'] == 'pcam':
-                x, target_y = x.to(device), y.to(device)
-                nbatch = x.shape[0]
-                nstate = model.head.num_classes
-                target_labels = model.head.target_labels
-                x = torch.repeat_interleave(x, nstate, dim=0)
-                y = torch.repeat_interleave(target_labels, nbatch, dim=0)
-                output = model(x, y).reshape(-1, nstate)
-                val_loss, pred = output.min(dim=1) 
-                
-            else: # tcga
-                x, target_y = x.to(device), y.to(device)
-                nbatch = x.shape[0]
-                nstate = model.head.num_classes
-                target_labels = model.head.target_labels.reshape(1, -1)
-                x = torch.repeat_interleave(x, nstate, dim=0)
-                y = torch.repeat_interleave(target_labels, nbatch, dim=0).reshape(-1, 1)
-                output = model(x, y).reshape(-1, nstate)
-                val_loss, pred = output.min(dim=1) 
-            
-            metric.update(pred, target_y)
+            x, y = x.to(device), y.to(device)
+            val_loss, pred = compute_prediction_metric(model, x) 
+            metric.update(pred, y)
             val_losses.append(val_loss.mean().item())
 
     metric_val = metric.compute()

@@ -1,8 +1,7 @@
 # Toggles between 'pcam' (binary image classification) and 'tcga' (multiclass embedding classification)
 dataset_type: 'toy' 
-num_samples: 256
 num_features: 9
-
+num_samples: 1024
 pcam_data:
   path: "../data/pcam"
 
@@ -33,7 +32,7 @@ model:
   entangling_layer: 'strong'
 
 training:
-  batch_size: 8 
-  lr: 0.6
-  epochs: 50
+  batch_size: 32
+  lr: 0.06
+  epochs: 20
   num_workers: 0
