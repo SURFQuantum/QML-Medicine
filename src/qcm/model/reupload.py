@@ -33,6 +33,7 @@ class QuantumHeadReupload(nn.Module):
                                                  3 * self.n_repetitions))
         self.etangling_layer = entangling_layer
         
+        self.target_labels = self.get_target_labels()
         self.target_states = self.get_target_states()
         self.target_density_matrices = torch.stack([compute_density_matrix(s) 
                                                     for s in self.target_states]) 
@@ -71,9 +72,14 @@ class QuantumHeadReupload(nn.Module):
 
     def get_pad_size(self):
         """Get the padding size for the input data."""
-
         mult = 3 * self.num_qubits
         return 3 - self.num_features % mult        
+
+    def get_target_labels(self):
+        if self.num_classes == 2:
+            return torch.tensor([0,1]).reshape(-1,1)
+        else:
+            raise ValueError("Reupload only works with two classes so far")        
 
     def get_target_states(self):
         if self.num_classes == 2 :
@@ -91,18 +97,15 @@ class QuantumHeadReupload(nn.Module):
 
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         
-        def criterion(output):
+        def loss(output):
             return (1.0 - output) ** 2
         
         x = self.pad_layer(x)
-
-        nbatch = x.shape[0]
         dm_y = self.target_density_matrices[y.int()].squeeze()
-        loss = 0.0
-        for isample in range(nbatch):
-            fidelity = self.circuit(x[isample], self.q_params, dm_y[isample])
-            loss = loss + criterion(fidelity)
-        return loss / nbatch
+
+        fidelity = vmap(lambda x, dm_y: self.circuit(x, self.q_params, dm_y))(x, dm_y)
+        return loss(fidelity)
+    
 
 # =============================================================================
 # Main Classifier

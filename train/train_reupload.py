@@ -53,11 +53,11 @@ def train_epoch(model: nn.Module,
         # Adapt label type for loss function
         if config['dataset_type'] == 'pcam':
             x, y = x.to(device), y.float().to(device)
-            loss = model(x, y)
+            loss = model(x, y).mean()
 
         else: # tcga
             x, y = x.to(device), y.long().to(device)
-            loss = model(x, y)
+            loss = model(x, y).mean()
 
         optimizer.zero_grad()
         loss.backward()
@@ -97,18 +97,27 @@ def validate(model: nn.Module,
     with torch.no_grad():
         for x, y in dataloader:
             if config['dataset_type'] == 'pcam':
-                x, y = x.to(device), y.squeeze().float().to(device)
-                output = model(x, y).squeeze(1)
-                pred = torch.sigmoid(output) > 0.5
-                val_loss = criterion(output)
+                x, target_y = x.to(device), y.to(device)
+                nbatch = x.shape[0]
+                nstate = model.head.num_classes
+                target_labels = model.head.target_labels
+                x = torch.repeat_interleave(x, nstate, dim=0)
+                y = torch.repeat_interleave(target_labels, nbatch, dim=0)
+                output = model(x, y).reshape(-1, nstate)
+                val_loss, pred = output.min(dim=1) 
+                
             else: # tcga
-                x, y = x.to(device), y.long().to(device)
-                output = model(x, y)
-                pred = torch.argmax(output, dim=1)
-                val_loss = criterion(output)
+                x, target_y = x.to(device), y.to(device)
+                nbatch = x.shape[0]
+                nstate = model.head.num_classes
+                target_labels = model.head.target_labels.reshape(1, -1)
+                x = torch.repeat_interleave(x, nstate, dim=0)
+                y = torch.repeat_interleave(target_labels, nbatch, dim=0).reshape(-1, 1)
+                output = model(x, y).reshape(-1, nstate)
+                val_loss, pred = output.min(dim=1) 
             
-            metric.update(pred, y)
-            val_losses.append(val_loss.item())
+            metric.update(pred, target_y)
+            val_losses.append(val_loss.mean().item())
 
     metric_val = metric.compute()
     avg_val_loss = np.mean(val_losses)
