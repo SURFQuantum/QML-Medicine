@@ -1,0 +1,13 @@
+torch
+torchvision
+torcheval
+torchmetrics
+pennylane
+scikit-learn
+matplotlib
+seaborn
+wandb
+pyyaml
+h5py
+gdown
+tensorboard
