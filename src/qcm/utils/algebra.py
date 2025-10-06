@@ -1,6 +1,6 @@
 import torch
 
-def compute_density_matrix(state):
+def compute_density_matrix(state: torch.Tensor) -> torch.Tensor:
     """Calculates the density matrix representation of a state.
 
     Args:
@@ -9,6 +9,8 @@ def compute_density_matrix(state):
     Returns:
         dm: (array[complex]): array representing the density matrix
     """
+    if state.ndim == 1:
+        state = state.reshape(-1, 1)
     return state * torch.conj(state).T
 
 def pad_data(data):

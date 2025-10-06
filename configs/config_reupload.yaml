@@ -22,7 +22,7 @@ model:
   # For QuantumHeadAngle, latent_dim will be equal to n_qubits.
   # For ClassicalHead, this is the embedding size before the final layer.
   latent_dim: 9
-  n_qubits: 1 # For TCGA, latent_dim for Amplitude head will be 2**4 = 16
+  n_qubits: 3 # For TCGA, latent_dim for Amplitude head will be 2**4 = 16
   n_quantum_layers: 3
   num_classes: 2 # Number of unique cancer types in TCGA dataset
 

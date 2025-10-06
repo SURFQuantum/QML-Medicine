@@ -1,9 +1,9 @@
+from typing import List
 import torch
 import torch.nn as nn
 from torch.func import vmap 
 import pennylane as qml
 import pennylane.numpy as np
-from functools import partial
 from .models import PCAMBackbone, TCGABackbone, ClassicalHead
 from ..utils.algebra import compute_density_matrix
 
@@ -43,16 +43,16 @@ class QuantumHeadReupload(nn.Module):
 
         dev = qml.device("default.qubit", wires=self.num_qubits)
         @qml.qnode(dev, interface="torch", diff_method="backprop")
-        def circuit(inputs, q_params_, y):
-            """A variational quantum circuit representing the Universal classifier.
+        def circuit(inputs: torch.Tensor, q_params_: torch.Tensor, y: torch.Tensor) -> float:
+            """Quantum Circuit of the head.
 
             Args:
-                params (array[float]): array of parameters
-                x (array[float]): single input vector
-                y (array[float]): single output state density matrix
+                inputs (torch.tensor): the input data to encode in the rotation of the gates
+                q_params_ (torch.tensor): variational parameters of the circuit
+                y (torch.tensor): density matrix associated with the target label
 
             Returns:
-                float: fidelity between output state and input
+                float: fidelity of the circuit w.r.t the target density matrix
             """
             inputs = inputs.reshape(self.num_qubits,-1)
             for irep in range(self.n_repetitions):
@@ -70,34 +70,69 @@ class QuantumHeadReupload(nn.Module):
         
         self.circuit = circuit
 
-    def get_pad_size(self):
+    def get_pad_size(self) -> int:
         """Get the padding size for the input data."""
         mult = 3 * self.num_qubits
         return 3 - self.num_features % mult        
 
-    def get_target_labels(self):
-        if self.num_classes == 2:
-            return torch.tensor([0,1]).reshape(-1,1)
-        else:
-            raise ValueError("Reupload only works with two classes so far")        
+    def get_target_labels(self) -> torch.Tensor:
+        """Generates the possible labels of the dataset
 
-    def get_target_states(self):
-        if self.num_classes == 2 :
-            
-            zeros = torch.zeros(2**self.num_qubits, 1)
-            zeros[0] = 1
+        Returns:
+            torch.Tensor: tensor containing the possible values
+        """
+        return torch.tensor(range(self.num_classes)).reshape(-1,1)
+       
 
-            ones = torch.zeros(2**self.num_qubits, 1)
-            ones[-1] = 1
+    def get_target_states(self) -> torch.Tensor:
+        """Computes the target states associtated with the different labels
 
-            return torch.stack((zeros, ones))
-        else:
-            raise ValueError("Reupload only works with two classes so far")
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            torch.Tensor: target states
+        """
+        if self.num_classes > 2**self.num_qubits :
+            raise ValueError(f"The number of possible output state in the computational basis: {2**self.num_qubits}" \
+            f"is smaller than the number of classes in the problem: {self.num_classes}" \
+            "Increase the number of qubits in the circuits or reduce the number classes")
+        
+        def get_ideal_state(used_index: List, available_index: List) -> int:
+            us_idx = torch.tensor(used_index)
+            av_idx = torch.tensor(available_index).reshape(-1, 1)
+            prod_distance = torch.abs(av_idx - us_idx).prod(1)
+            return prod_distance.argmax().item()
+
+
+        target_states = torch.zeros(self.num_classes, 2**self.num_qubits)
+        available_index = list(range(2**self.num_qubits))
+        used_index = []
+        for idx in range(self.num_classes):
+            if idx == 0:
+                state_idx = 0
+            else:
+                state_idx = available_index[get_ideal_state(used_index, available_index)]
+
+            target_states[idx, state_idx] = 1
+            used_index.append(state_idx)
+            available_index.remove(state_idx)
+
+        return target_states
+        
 
 
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         
-        def loss(output):
+        def loss(output: torch.Tensor) -> torch.Tensor:
+            """Computes the fidelity from the circuit output
+
+            Args:
+                output (torch.tensor): output of the circuit
+
+            Returns:
+                torch.Tensor: fidelities
+            """
             return (1.0 - output) ** 2
         
         x = self.pad_layer(x)
