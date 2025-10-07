@@ -121,7 +121,6 @@ class QuantumHeadReupload(nn.Module):
         return target_states
         
 
-
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         
         def loss(output: torch.Tensor) -> torch.Tensor:
@@ -197,7 +196,6 @@ class ReuploadClassifier(nn.Module):
     def __init__(self, config: dict, use_quantum: bool = False):
         super().__init__()
         model_cfg = config['model']
-
         num_classes = 2
 
         self.head = QuantumHeadReupload(
