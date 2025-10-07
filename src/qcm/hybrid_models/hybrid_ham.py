@@ -26,15 +26,16 @@ class HybridClassifier(nn.Module):
         num_classes = model_cfg['num_classes']
 
         latent_dim = 2 ** n_qubits
-        H, W = grid_shape_for_amplitude(n_qubits)
+        grid_height, grid_width = grid_shape_for_amplitude(n_qubits)
 
         if dataset_type == 'tcga':
-            self.backbone = TCGABackbone(input_dim=768, latent_dim=latent_dim,
-                                            preserve_spatial=True, out_grid=(H, W))
+            self.backbone = TCGABackbone(input_dim=768, 
+                                         latent_dim=latent_dim,
+                                         out_grid=(grid_height, grid_width))
         else:
             self.backbone = PCAMBackbone(latent_dim=latent_dim,
-                                            filters=model_cfg['pcam_filters'],
-                                            preserve_spatial=True, out_grid=(H, W))
+                                         filters=model_cfg['pcam_filters'],
+                                         out_grid=(grid_height, grid_width))
             
         variant = model_cfg.get('hamiltonian_variant', 'simple')  # 'simple' or 'paper'
         if variant == 'simple':
