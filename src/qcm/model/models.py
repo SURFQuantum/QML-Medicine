@@ -5,43 +5,9 @@ import torch.nn as nn
 from torch.func import vmap 
 import pennylane as qml
 
-# =============================================================================
-# Backbones
-# =============================================================================
-class PCAMBackbone(nn.Module):
-    def __init__(self, latent_dim: int = 64, filters: int = 4):
-        super().__init__()
-        multiplier = 2
-        self.features = nn.Sequential(
-            nn.Conv2d(3, filters, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(filters), nn.ReLU(),
-            nn.Conv2d(filters, filters*multiplier, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(filters*multiplier), nn.ReLU(),
-            nn.Conv2d(filters*multiplier, filters*multiplier**2, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(filters*multiplier**2), nn.ReLU(),
-            nn.AdaptiveAvgPool2d((2, 2))
-        )
-        self.latent = nn.Sequential(
-            nn.Linear(filters*multiplier**2 * 2 * 2, latent_dim),
-            nn.Tanh()
-        )
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.features(x)
-        x = x.view(x.size(0), -1)
-        return self.latent(x)
+from ..backbone.PCAM import PCAM as PCAMBackbone
+from ..backbone.TCGA import TCGA as TCGABackbone
 
-class TCGABackbone(nn.Module):
-    def __init__(self, input_dim: int = 768, latent_dim: int = 16):
-        super().__init__()
-        self.projection = nn.Sequential(
-            nn.Linear(input_dim, latent_dim),
-            nn.LayerNorm(latent_dim),
-            nn.ReLU(),
-            nn.Tanh()
-        )
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.projection(x)
-        
 # =============================================================================
 # Heads
 # =============================================================================
