@@ -7,8 +7,6 @@ def hermitianize_image_matrix(image_matrix: np.ndarray) -> np.ndarray:
     return 0.5 * (image_matrix + image_matrix.conj().T)
 
 def make_embedding_qnode(n_qubits, H, time=2.4, n_steps=2):
-    """ Hamiltonian embedding for a quantum node based on https://arxiv.org/pdf/2407.14055
-    """
     dev = qml.device("default.qubit", wires=n_qubits)
 
     @qml.qnode(dev)
