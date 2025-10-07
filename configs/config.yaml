@@ -1,5 +1,5 @@
 # Toggles between 'pcam' (binary image classification) and 'tcga' (multiclass embedding classification)
-dataset_type: 'tcga' 
+dataset_type: 'pcam'
 
 pcam_data:
   path: "./src/data/pcam"
@@ -23,12 +23,12 @@ model:
   num_classes: 37 # Number of unique cancer types in TCGA dataset
 
   # 'amplitude' or 'angle'
-  quantum_head_type: 'amplitude' 
+  quantum_head_type: 'amplitude'
   # 'strong' for StronglyEntanglingLayers or 'basic' for BasicEntanglerLayers
   entangling_layer: 'strong'
 
 training:
   batch_size: 512
-  lr: 0.0006
+  lr: 0.0001
   epochs: 50
   num_workers: 8
