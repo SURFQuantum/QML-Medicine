@@ -17,9 +17,9 @@ import logging
 from datetime import datetime
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-from data.datasets import get_dataloaders
-from model.models import HybridClassifier
-from utils.functions import visualize_latents, log_losses_to_csv
+from qcm.data.datasets import get_dataloaders
+from qcm.model.models import HybridClassifier
+from qcm.utils.functions import visualize_latents, log_losses_to_csv
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
