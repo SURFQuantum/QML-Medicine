@@ -18,7 +18,7 @@ from datetime import datetime
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from qcm.data.datasets import get_dataloaders
-from qcm.hybrid.model.models import HybridClassifier
+from qcm.hybrid_models.hybrid_qnn import HybridClassifier
 from qcm.utils.functions import visualize_latents, log_losses_to_csv
 
 # Set device
