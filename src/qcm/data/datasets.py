@@ -5,6 +5,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 
+from .band import BandDataset
 from .pcam import PCAMDataset
 from .tcga import TCGADataset
 
@@ -45,6 +46,20 @@ def get_dataloaders(config: dict) -> Tuple[DataLoader, DataLoader]:
         
         # Create train/validation split
         val_split = config['tcga_data']['val_split']
+        val_size = int(len(full_dataset) * val_split)
+        train_size = len(full_dataset) - val_size
+        
+        train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
+
+    elif dataset_type == 'band':
+        
+        full_dataset = BandDataset(
+            size=config['band_data']['size'],
+            num_samples=config['band_data']['num_samples']
+        )
+        
+        # Create train/validation split
+        val_split = config['band_data']['val_split']
         val_size = int(len(full_dataset) * val_split)
         train_size = len(full_dataset) - val_size
         
