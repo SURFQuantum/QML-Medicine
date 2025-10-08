@@ -4,7 +4,7 @@ import pennylane as qml
 from typing import Tuple
 import math
 
-from ..utils.image_grid import grid_shape_for_qubits
+from ...utils.image_grid import grid_shape_for_qubits
 
 class QuantumHeadHamiltonianSimple(nn.Module):
     """Hamiltonian embedding for a quantum node simplified and lighter to compute."""

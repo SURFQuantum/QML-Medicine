@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.func import vmap 
 import pennylane as qml
-from ..utils.algebra import compute_density_matrix
+from ...utils.algebra import compute_density_matrix
 
 class QuantumHeadReupload(nn.Module):
 
