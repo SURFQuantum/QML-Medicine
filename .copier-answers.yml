@@ -1,6 +1,29 @@
 # Changes here will be overwritten by Copier
+SelectCitation:
+- AddCitationFile_flag
+SelectCodeQualityFeatures:
+- AddLocalTests_flag
+- SelectGitHubActions_flag
+- AddLinting_flag
+- AddPreCommit_flag
+- AddSonarCloud_flag
+- AddEditorConfig_flag
+SelectCommunityFeatures:
+- AddCodeConduct_flag
+- AddContributing_flag
+SelectDocumentationFeatures:
+- AddLocalDocumentation_flag
+- AddOnlineDocumentation_flag
+- AddDevDoc_flag
+- AddGitHubActionDocumentation_flag
+SelectGitHubActions:
+- AddGitHubActionBuild_flag
+SelectPublishReleaseFeatures:
+- SelectCitation_flag
+- AddZenodo_flag
 _commit: 0.6.1
 _src_path: https://github.com/nlesc/python-template.git
+code_of_conduct_email: nicolas.renaud@surf.nl
 copyright_holder: SURF Quantum
 email: nicolas.renaud@surf.nl
 full_name: SURF Quantum
@@ -9,5 +32,5 @@ keywords: quantum computing, image processing
 license: Apachev2
 package_name: qcm
 package_short_description: Image Processing using Quantum Computers
-template_profile: minimum
+template_profile: recommended
 version: 0.1.0
