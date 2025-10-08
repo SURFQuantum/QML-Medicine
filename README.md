@@ -2,20 +2,19 @@
 
 Quantum advantage for medical applications.
 
-## Quick Start
-| fair-software.eu recommendations | |
-| :-- | :--  |
-| (1/5) code repository              | [![github repo badge](https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue)](https://github.com/SURFQuantum/qcm) |
-| (2/5) license                      | [![github license badge](https://img.shields.io/github/license/SURFQuantum/qcm)](https://github.com/SURFQuantum/qcm) |
-| (3/5) community registry           | [![RSD](https://img.shields.io/badge/rsd-qcm-00a3e3.svg)](https://www.research-software.nl/software/qcm) [![workflow pypi badge](https://img.shields.io/pypi/v/qcm.svg?colorB=blue)](https://pypi.python.org/project/qcm/) |
-| (4/5) citation                     | [![DOI](https://zenodo.org/badge/DOI/<replace-with-created-DOI>.svg)](https://doi.org/<replace-with-created-DOI>)|
-| (5/5) checklist                    | [![workflow cii badge](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>/badge)](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>) |
-| howfairis                          | [![fair-software badge](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu) |
-| **Other best practices**           | &nbsp; |
-| Static analysis                    | [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm) |
-| Coverage                           | [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm) || Documentation                      | [![Documentation Status](https://readthedocs.org/projects/qcm/badge/?version=latest)](https://qcm.readthedocs.io/en/latest/?badge=latest) || **GitHub Actions**                 | &nbsp; |
-| Build                              | [![build](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml) |
-| Citation data consistency          | [![cffconvert](https://github.com/SURFQuantum/qcm/actions/workflows/cffconvert.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/cffconvert.yml) || SonarCloud                         | [![sonarcloud](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml) |## How to use qcm
+[![github license badge](https://img.shields.io/github/license/SURFQuantum/qcm)](https://github.com/SURFQuantum/qcm)
+
+[![build](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml)
+
+[![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
+
+[![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
+
+[![sonarcloud](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml)
+
+[![Documentation Status](https://readthedocs.org/projects/qcm/badge/?version=latest)](https://qcm.readthedocs.io/en/latest/?badge=latest)
+
+## How to use qcm
 
 1.  **Create a virtual environment:**
     ```bash
