@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier
+_commit: 0.6.1
+_src_path: https://github.com/nlesc/python-template.git
+copyright_holder: SURF Quantum
+email: nicolas.renaud@surf.nl
+full_name: SURF Quantum
+github_organization: SURFQuantum
+keywords: quantum computing, image processing
+license: Apachev2
+package_name: qcm
+package_short_description: Image Processing using Quantum Computers
+template_profile: minimum
+version: 0.1.0
