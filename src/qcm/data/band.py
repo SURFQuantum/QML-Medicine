@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 # Horizontal and vertical bands Dataset (Used for testing)
 # =============================================================================
 class BandDataset(Dataset):
-    def __init__(self, size: int, num_samples: int):
+    def __init__(self, size: int, num_samples: int, max_filling = 0.75):
         """A data set composed of vertical and horizontal bands.
 
         Args:
@@ -16,7 +16,7 @@ class BandDataset(Dataset):
         self.num_samples = num_samples
 
         self.num_min_band = 1
-        self.num_max_band = 2 * self.size // 3
+        self.num_max_band = int(size * max_filling)
 
     def __len__(self):
         return len(self.num_samples)

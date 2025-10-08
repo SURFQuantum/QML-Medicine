@@ -17,7 +17,7 @@ import logging
 from datetime import datetime
 
 from qcm.data.datasets import get_dataloaders
-from qcm.hybrid_models.hybrid_reupload import HybridReuploadClassifier # Updated model import
+from qcm.models.hybrid_reupload import HybridReuploadClassifier # Updated model import
 from qcm.utils.functions import visualize_latents, log_losses_to_csv
 from qcm.utils.algebra import compute_density_matrix
 
