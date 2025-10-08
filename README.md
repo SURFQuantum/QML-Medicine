@@ -3,15 +3,10 @@
 Quantum advantage for medical applications.
 
 [![github license badge](https://img.shields.io/github/license/SURFQuantum/qcm)](https://github.com/SURFQuantum/qcm)
-
 [![build](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml)
-
 [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
-
 [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
-
 [![sonarcloud](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml)
-
 [![Documentation Status](https://readthedocs.org/projects/qcm/badge/?version=latest)](https://qcm.readthedocs.io/en/latest/?badge=latest)
 
 ## How to use qcm
