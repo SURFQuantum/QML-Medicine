@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
-from ..encoder.pcam import PCAM as PCAMBackbone
-from ..encoder.tcga import TCGA as TCGABackbone
-from ..qnn.classical import ClassicalHead
-from ..reupload.reupload import QuantumHeadReupload
+
+from ..components.encoder.pcam import PCAM as PCAMBackbone
+from ..components.encoder.tcga import TCGA as TCGABackbone
+from ..components.qnn.classical import ClassicalHead
+from ..components.reupload.reupload import QuantumHeadReupload
 
 class HybridReuploadClassifier(nn.Module):
     def __init__(self, config: dict, use_quantum: bool = False):

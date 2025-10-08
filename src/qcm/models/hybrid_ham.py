@@ -4,11 +4,11 @@ import torch
 import torch.nn as nn
 
 
-from ..encoder.pcam import PCAMSpatialPreserving as PCAMBackbone
-from ..encoder.tcga import TCGASpatialPreserving as TCGABackbone
+from ..components.encoder.pcam import PCAMSpatialPreserving as PCAMBackbone
+from ..components.encoder.tcga import TCGASpatialPreserving as TCGABackbone
 
-from ..hamiltonian.embedding import QuantumHeadHamiltonianPaper
-from ..hamiltonian.embedding_light import QuantumHeadHamiltonianSimple
+from ..components.hamiltonian.embedding import QuantumHeadHamiltonianPaper
+from ..components.hamiltonian.embedding_light import QuantumHeadHamiltonianSimple
 
 
 from ..utils.image_grid import grid_shape_for_amplitude

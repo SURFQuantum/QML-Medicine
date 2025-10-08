@@ -4,13 +4,13 @@ import torch
 import torch.nn as nn
 
 
-from ..encoder.pcam import PCAM as PCAMBackbone
-from ..encoder.tcga import TCGA as TCGABackbone
+from ..components.encoder.pcam import PCAM as PCAMBackbone
+from ..components.encoder.tcga import TCGA as TCGABackbone
 
 
-from ..qnn.classical import ClassicalHead
-from ..qnn.amplitude_encoding import QuantumHeadAmplitude
-from ..qnn.angle_encoding import QuantumHeadAngle
+from ..components.qnn.classical import ClassicalHead
+from ..components.qnn.amplitude_encoding import QuantumHeadAmplitude
+from ..components.qnn.angle_encoding import QuantumHeadAngle
 
 
 class HybridClassifier(nn.Module):
