@@ -37,6 +37,8 @@ class QuantumHeadReupload(nn.Module):
         self.input_pad_size = self.num_qubits * self.num_features_per_qubits - self.num_features
         self.pad_layer = torch.nn.ZeroPad1d((0, self.input_pad_size))
 
+        self.required_latent_dim = self.num_qubits * self.num_features_per_qubits
+
         dev = qml.device("default.qubit", wires=self.num_qubits)
         @qml.qnode(dev, interface="torch", diff_method="backprop")
         def circuit(inputs, q_params_, y):
@@ -101,6 +103,14 @@ class QuantumHeadReupload(nn.Module):
 
         fidelity = vmap(lambda x, dm_y: self.circuit(x, self.q_params, dm_y))(x, dm_y)
         return loss(fidelity)
+    
+    def draw_circuit(self, max_expansion=1):
+        """Draw the circuit for visualization purposes."""
+        x = torch.rand(self.required_latent_dim)
+        param = torch.rand(self.q_params.shape)
+        y = self.target_density_matrices[0]
+        print(qml.draw_mpl(qml.transforms.decompose(self.circuit, 
+                                                    max_expansion = max_expansion))(x, param, y))
     
 
     
