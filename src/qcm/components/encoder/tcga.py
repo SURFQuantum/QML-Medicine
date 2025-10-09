@@ -27,8 +27,8 @@ class TCGASpatialPreserving(nn.Module):
         super().__init__()
         self.out_grid = out_grid
         
-        H, W = out_grid
-        flat_dim = H * W
+        height, width = out_grid
+        flat_dim = height * width
         self.projection = nn.Sequential(
             nn.Linear(input_dim, flat_dim),
             nn.LayerNorm(flat_dim),

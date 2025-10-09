@@ -8,6 +8,7 @@ class QuantumHeadAngle(nn.Module):
         super().__init__()
         self.n_qubits = n_qubits
         self.n_layers = n_layers
+        self.required_latent_dim = n_qubits
 
         if entangling_layer == 'strong':
             self.q_params = nn.Parameter(torch.randn(n_layers, n_qubits, 3))
@@ -35,3 +36,10 @@ class QuantumHeadAngle(nn.Module):
         quantum_features = torch.stack(raw_vmap_output, dim=1).float()
         
         return self.classifier(quantum_features)
+    
+    def draw_circuit(self, max_expansion=1):
+        """Draw the circuit for visualization purposes."""
+        x = torch.rand(self.required_latent_dim)
+        param = torch.rand(self.q_params.shape)
+        print(qml.draw_mpl(qml.transforms.decompose(self.circuit, 
+                                                    max_expansion = max_expansion))(x, param))

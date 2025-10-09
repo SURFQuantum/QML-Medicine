@@ -54,9 +54,9 @@ class PCAMSpatialPreserving(nn.Module):
             nn.BatchNorm2d(filters*multiplier**2), nn.ReLU()
         )
         
-        H, W = out_grid
+        height, width = out_grid
         # Replace the final pooling with one that outputs the desired grid
-        self.pool = nn.AdaptiveAvgPool2d((H, W))
+        self.pool = nn.AdaptiveAvgPool2d((height, width))
         # project channel dimension to 1 per grid cell (a scalar per cell)
         self.cell_proj = nn.Conv2d(filters*multiplier**2, 1, kernel_size=1)
 

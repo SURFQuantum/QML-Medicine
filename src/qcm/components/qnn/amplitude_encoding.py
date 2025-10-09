@@ -4,6 +4,7 @@ import torch.nn as nn
 import pennylane as qml
 
 class QuantumHeadAmplitude(nn.Module):
+
     def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong'):
         super().__init__()
         self.n_qubits = n_qubits
@@ -45,3 +46,10 @@ class QuantumHeadAmplitude(nn.Module):
         quantum_features = stacked_features.permute(1, 0).float()
         
         return self.classifier(quantum_features)
+    
+    def draw_circuit(self, max_expansion=1):
+        """Draw the circuit for visualization purposes."""
+        x = torch.rand(self.required_latent_dim)
+        param = torch.rand(self.q_params.shape)
+        print(qml.draw_mpl(qml.transforms.decompose(self.circuit, 
+                                                    max_expansion = max_expansion))(x, param))
