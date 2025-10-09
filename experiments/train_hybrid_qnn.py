@@ -10,7 +10,6 @@ from torch.optim import Adam, AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from torchmetrics.classification import BinaryF1Score, MulticlassAccuracy
 from torcheval.metrics import Throughput
 from argparse import ArgumentParser
 import logging
