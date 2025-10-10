@@ -2,11 +2,11 @@
 
 Quantum advantage for medical applications.
 
-[![github license badge](https://img.shields.io/github/license/SURFQuantum/qcm)](https://github.com/SURFQuantum/qcm)
-[![build](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/build.yml)
-[![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
-[![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_qcm&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_qcm)
-[![sonarcloud](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/qcm/actions/workflows/sonarcloud.yml)
+[![github license badge](https://img.shields.io/github/license/SURFQuantum/QML-Medicine)](https://github.com/SURFQuantum/QML-Medicine)
+[![build](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml)
+[![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
+[![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
+[![sonarcloud](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml)
 
 ## How to use qcm
 
@@ -18,7 +18,7 @@ Quantum advantage for medical applications.
 
 2.  **Install dependencies:**
     ```bash
-    pip install -r requirements.txt
+    pip install .
     ```
 
 3.  **Set up the data:**
