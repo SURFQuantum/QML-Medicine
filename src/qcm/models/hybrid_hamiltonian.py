@@ -2,7 +2,7 @@
 
 import torch
 import torch.nn as nn
-
+from torchmetrics.classification import BinaryF1Score, MulticlassAccuracy
 
 from ..components.encoder.pcam import PCAMSpatialPreserving as PCAMBackbone
 from ..components.encoder.tcga import TCGASpatialPreserving as TCGABackbone
@@ -60,8 +60,76 @@ class HybridClassifier(nn.Module):
             )
         else:
             raise ValueError(f"Unknown hamiltonian_variant: {variant}")
-            
+
+        if num_classes == 2:
+            self.loss_function = nn.BCEWithLogitsLoss()
+            self.validation_metric = BinaryF1Score()
+        else:
+            self.loss_function = nn.CrossEntropyLoss()
+            self.validation_metric = MulticlassAccuracy(num_classes=num_classes)
+                     
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.backbone(x)
         return self.head(x)
+    
+
+    def training_step(self, batch: torch.Tensor,
+                    optimizer: torch.optim.Optimizer) -> torch.Tensor:
+        """A single training step over a batch of data.
+
+        Args:
+            batch (torch.Tensor): data batch
+            optimizer (torch.optim.Optimizer): optimizer to use
+
+        Returns:
+            torch.Tensor: loss value
+        """
+        
+        x, _ = batch
+        output = self.forward(x).mean()
+        loss = self.loss_function(output)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        return loss
+    
+    def validation_step(self, batch: torch.Tensor) -> torch.Tensor:
+        """A single validation step over a batch of data.
+
+        Args:
+            batch (torch.Tensor): data batch
+
+        Returns:
+            torch.Tensor: loss value
+        """
+        x, y = batch
+        loss, pred = self.predict(x, y)
+        self.validation_metric.update(pred, y)
+        return loss, pred
+    
+    def predict(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        """Predict the class probabilities for input data.
+
+        Args:
+            x (torch.Tensor): input data
+            y (torch.Tensor): true labels
+
+        Returns:
+            torch.Tensor: loss value
+            torch.Tensor: predicted labels
+        """
+
+        if self.num_classes == 2:
+            x, y = x, y.squeeze().float()
+            output = self.forward(x).squeeze(1)
+            pred = torch.sigmoid(output) > 0.5
+            val_loss = self.loss_function(output, y)
+            
+        else: 
+            x, y = x, y.long()
+            output = self.forward(x)
+            pred = torch.argmax(output, dim=1)
+            val_loss = self.loss_function(output, y)
+        
+        return val_loss, pred

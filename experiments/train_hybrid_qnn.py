@@ -9,6 +9,7 @@ from pathlib import Path
 from torch.optim import Adam, AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
+from torchmetrics.classification import BinaryF1Score, MulticlassAccuracy
 from torch.utils.tensorboard import SummaryWriter
 from torcheval.metrics import Throughput
 from argparse import ArgumentParser
@@ -28,6 +29,81 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+def train_epoch(model: nn.Module, dataloader: DataLoader, 
+                criterion: nn.Module, optimizer: torch.optim.Optimizer, 
+                scheduler, epoch: int, config: dict, writer: SummaryWriter):
+    logger.info(f"Starting training epoch {epoch}")
+    model.train()
+    losses = []
+    throughput = Throughput()
+    start = time.monotonic()
+
+    for i, (x, y) in enumerate(dataloader):
+        # Adapt label type for loss function
+        if config['dataset_type'] == 'pcam':
+            x, y = x.to(device), y.float().to(device)
+            output = model(x).squeeze(1)
+            loss = criterion(output, y.squeeze())
+        else: # tcga
+            x, y = x.to(device), y.long().to(device)
+            output = model(x)
+            loss = criterion(output, y)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        losses.append(loss.item())
+
+        if i % 100 == 0 and i > 0:
+            throughput.update(i * config['training']['batch_size'], time.monotonic() - start)
+            writer.add_scalar('Train/Loss', np.mean(losses[-100:]), epoch * len(dataloader) + i)
+            writer.add_scalar('Train/Throughput', throughput.compute(), epoch * len(dataloader) + i)
+            logger.info(f"Epoch {epoch}, Step {i}: Loss={loss.item():.4f}, Throughput={throughput.compute():.2f} items/sec")
+
+    scheduler.step()
+    logger.info(f"Finished training epoch {epoch}. Avg Loss: {np.mean(losses):.4f}")
+    return np.mean(losses)
+
+
+def validate(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, epoch: int, config: dict, writer: SummaryWriter):
+    logger.info(f"Starting validation for epoch {epoch}")
+    model.eval()
+    val_losses = []
+    
+    # Select metric based on dataset type
+    if config['dataset_type'] == 'pcam':
+        metric = BinaryF1Score().to(device)
+        metric_name = "F1 Score"
+    else: # tcga
+        num_classes = config['model']['num_classes']
+        metric = MulticlassAccuracy(num_classes=num_classes).to(device)
+        metric_name = "Accuracy"
+
+    with torch.no_grad():
+        for x, y in dataloader:
+            if config['dataset_type'] == 'pcam':
+                x, y = x.to(device), y.squeeze().float().to(device)
+                output = model(x).squeeze(1)
+                pred = torch.sigmoid(output) > 0.5
+                val_loss = criterion(output, y)
+            else: # tcga
+                x, y = x.to(device), y.long().to(device)
+                output = model(x)
+                pred = torch.argmax(output, dim=1)
+                val_loss = criterion(output, y)
+            
+            metric.update(pred, y)
+            val_losses.append(val_loss.item())
+
+    metric_val = metric.compute()
+    avg_val_loss = np.mean(val_losses)
+    
+    writer.add_scalar('Val/Loss', avg_val_loss, epoch)
+    writer.add_scalar(f'Val/{metric_name}', metric_val.item(), epoch)
+    logger.info(f"Validation Epoch {epoch}: Loss={avg_val_loss:.4f}, {metric_name}={metric_val.item():.4f}")
+    
+    return avg_val_loss
 
 def main():
     parser = ArgumentParser()

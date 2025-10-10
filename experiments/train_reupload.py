@@ -19,7 +19,7 @@ from datetime import datetime
 from qcm.data.datasets import get_dataloaders
 from qcm.models.hybrid_reupload import HybridReuploadClassifier # Updated model import
 from qcm.utils.functions import visualize_latents, log_losses_to_csv
-from qcm.utils.algebra import compute_density_matrix
+from qcm.utils.functions import load_config
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -28,22 +28,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-
-def compute_prediction_metric(model, x):
-    with torch.no_grad():        
-        nbatch = x.shape[0]
-        nstate = model.head.num_classes
-        target_labels = model.head.target_labels.reshape(1, -1)
-        x = torch.repeat_interleave(x, nstate, dim=0)
-        y = torch.repeat_interleave(target_labels, nbatch, dim=0).reshape(-1 ,1)
-        output = model(x, y).reshape(-1, nstate)
-        val_loss, pred = output.min(dim=1) 
-        return val_loss, pred
-    
-def load_config(path: str) -> dict:
-    logger.info(f"Loading config from: {path}")
-    with open(path, 'r') as f:
-        return yaml.safe_load(f)
 
 def train_epoch(model: nn.Module, 
                 dataloader: DataLoader, 
@@ -64,15 +48,7 @@ def train_epoch(model: nn.Module,
     logger.info(f"Epoch {epoch} START")
     for i, (x, y) in enumerate(dataloader):
 
-        x, y = x.to(device), y.long().to(device)
-        _, pred = compute_prediction_metric(model, x) 
-        metric_train.update(pred, y)
-        loss = model(x, y).mean()
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
+        loss = model.training_step((x.to(device), y.to(device)), optimizer)
         losses.append(loss.item())
         
         if i % 100 == 0 and i > 0:
@@ -103,8 +79,8 @@ def validate(model: nn.Module,
 
     with torch.no_grad():
         for x, y in dataloader:
-            x, y = x.to(device), y.to(device)
-            val_loss, pred = compute_prediction_metric(model, x) 
+
+            val_loss, pred = model.validation_step((x.to(device), y.to(device)))
             metric.update(pred, y)
             val_losses.append(val_loss.mean().item())
 
