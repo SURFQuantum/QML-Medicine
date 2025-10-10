@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
 import pennylane as qml
-from typing import Tuple
-import math
-
+from torch.func import vmap
 from ...utils.image_grid import grid_shape_for_qubits
 
 class QuantumHeadHamiltonianSimple(nn.Module):
@@ -70,20 +68,30 @@ class QuantumHeadHamiltonianSimple(nn.Module):
         self.classifier = nn.Linear(n_qubits, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+
+        def circuit_wrapper(single_input):
+            return self.circuit(single_input, self.q_params)
+        
         if x.dim() != 2:
             raise ValueError("Input x must be 2D (batch_size, latent_dim)")
         batch_size, input_dim = x.shape
         if input_dim != self.required_latent_dim:
             raise ValueError("Input dim mismatch for HamiltonianSimple.")
 
-        coeffs_all = self.coeff_layer(x)  # (batch, n_qubits + n_pairs)
-        outputs = []
-        for b in range(batch_size):
-            flat = coeffs_all[b]
-            out = self.circuit(flat, self.q_params)
-            outputs.append(torch.stack(out))
-        quantum_features = torch.stack(outputs, dim=0).float()
+        coeffs_all = self.coeff_layer(x)
+        vectorized_circuit = vmap(circuit_wrapper)
+        raw_vmap_output = vectorized_circuit(coeffs_all)
+        quantum_features = torch.stack(raw_vmap_output, dim=1).float()
         return self.classifier(quantum_features)
+
+        # coeffs_all = self.coeff_layer(x)  # (batch, n_qubits + n_pairs)
+        # outputs = []
+        # for b in range(batch_size):
+        #     flat = coeffs_all[b]
+        #     out = self.circuit(flat, self.q_params)
+        #     outputs.append(torch.stack(out))
+        # quantum_features = torch.stack(outputs, dim=0).float()
+        # return self.classifier(quantum_features)
 
     def draw_circuit(self, max_expansion=1):
         """Draw the circuit for visualization purposes."""
