@@ -4,9 +4,10 @@ Quantum advantage for medical applications.
 
 [![github license badge](https://img.shields.io/github/license/SURFQuantum/QML-Medicine)](https://github.com/SURFQuantum/QML-Medicine)
 [![build](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml)
-[![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
+
+<!-- [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
 [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
-[![sonarcloud](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml)
+[![sonarcloud](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml) -->
 
 ## How to use qcm
 
