@@ -36,7 +36,8 @@ dependencies = [
     "h5py",
     "gdown",
     "tensorboard",
-    "tqdm"
+    "tqdm",
+    "lightning"
 ]
 description = "Image Processing using Quantum Computers"
 keywords = ["quantum computing"," image processing"]
@@ -73,9 +74,9 @@ publishing = [
 ]
 
 [project.urls]
-Repository = "https://github.com/SURFQuantum/qcm"
-Issues = "https://github.com/SURFQuantum/qcm/issues"
-ReadTheDocs = "https://qcm.readthedocs.io"
+Repository = "https://github.com/SURFQuantum/QML-Medicine"
+Issues = "https://github.com/SURFQuantum/QML-Medicine/issues"
+ReadTheDocs = "https://QML-Medicine.readthedocs.io"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

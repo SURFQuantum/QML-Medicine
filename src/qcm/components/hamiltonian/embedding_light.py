@@ -84,3 +84,10 @@ class QuantumHeadHamiltonianSimple(nn.Module):
             outputs.append(torch.stack(out))
         quantum_features = torch.stack(outputs, dim=0).float()
         return self.classifier(quantum_features)
+
+    def draw_circuit(self, max_expansion=1):
+        """Draw the circuit for visualization purposes."""
+        x = torch.rand(self.required_latent_dim)
+        param = torch.rand(self.q_params.shape)
+        print(qml.draw_mpl(qml.transforms.decompose(self.circuit, 
+                                                    max_expansion = max_expansion))(x, param))
