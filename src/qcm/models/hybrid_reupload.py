@@ -7,6 +7,7 @@ from ..components.qnn.classical import ClassicalHead
 from ..components.reupload.reupload import QuantumHeadReupload
 
 class HybridReuploadClassifier(nn.Module):
+
     def __init__(self, config: dict, use_quantum: bool = False):
         super().__init__()
         model_cfg = config['model']
@@ -48,31 +49,44 @@ class HybridReuploadClassifier(nn.Module):
     
         self.normalisation = torch.nn.Sigmoid()
 
-        if num_classes == 2:
-            self.valifation_metric = BinaryF1Score()
-        else:
-            self.valifation_metric = MulticlassAccuracy(num_classes=num_classes)
+        self.validation_metric = self.configure_validatiaon_metric(num_classes)
+        self.optimizer = self.configure_optimizer()
+
 
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         x = self.backbone(x)
         x = self.normalisation(x)
         return self.head(x, y)
     
-    def training_step(self, batch: torch.Tensor, optimizer: torch.optim.Optimizer) -> torch.Tensor:
+    def configure_validatiaon_metric(self, num_classes: int):
+        if num_classes == 2:
+            return BinaryF1Score()
+        else:
+            return MulticlassAccuracy(num_classes=num_classes)
+    
+    def configure_optimizer(self, optimizer: torch.optim.Optimizer = None):
+        """Setup the optimizer and learning rate scheduler."""
+        if optimizer is None:
+            return torch.optim.Adam(
+                filter(lambda p: p.requires_grad, self.parameters()), 
+            )
+        else:
+            return optimizer
+
+    def training_step(self, batch: torch.Tensor) -> torch.Tensor:
         """A single trainig step over a batch of data.
 
         Args:
             batch (torch.Tensor): data batch
-            optimizer (torch.optim.Optimizer): optimizer to use
 
         Returns:
             torch.Tensor: loss value
         """
         x, y = batch
         loss = self.forward(x, y).mean()
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        self.optimizer.step()
         return loss
     
     def validation_step(self, batch: torch.Tensor) -> torch.Tensor:

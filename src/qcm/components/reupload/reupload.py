@@ -95,14 +95,14 @@ class QuantumHeadReupload(nn.Module):
 
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         
-        def loss(output):
+        def loss_fn(output):
             return (1.0 - output) ** 2
         
         x = self.pad_layer(x)
         dm_y = self.target_density_matrices[y.int()].squeeze()
 
         fidelity = vmap(lambda x, dm_y: self.circuit(x, self.q_params, dm_y))(x, dm_y)
-        return loss(fidelity)
+        return loss_fn(fidelity)
     
     def draw_circuit(self, max_expansion=1):
         """Draw the circuit for visualization purposes."""

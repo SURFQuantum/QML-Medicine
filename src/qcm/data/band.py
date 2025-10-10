@@ -5,18 +5,22 @@ from torch.utils.data import Dataset
 # Horizontal and vertical bands Dataset (Used for testing)
 # =============================================================================
 class BandDataset(Dataset):
-    def __init__(self, size: int = 16, num_samples: int = 1000, max_filling = 0.75):
+    def __init__(self, 
+                 image_size: int = 16, 
+                 num_samples: int = 1000, 
+                 max_filling = 0.75,
+                 num_channels: int = 1):
         """A data set composed of vertical and horizontal bands.
 
         Args:
             size (int): number of pixels for the width and height of the image
             num_samples (int): number of samples in the dataset
         """
-        self.size = size
+        self.size = image_size
         self.num_samples = num_samples
-
+        self.num_channels = num_channels
         self.num_min_band = 1
-        self.num_max_band = int(size * max_filling)
+        self.num_max_band = int(image_size * max_filling)
 
         self.indices = self._get_indices()
 
@@ -28,18 +32,21 @@ class BandDataset(Dataset):
         return indices
 
     def __len__(self):
-        return len(self.num_samples)
+        return self.num_samples
 
     def __getitem__(self, idx):
 
-        image = torch.zeros(self.size, self.size)
+        image = torch.zeros(self.num_channels, self.size, self.size)
         label = torch.randint(2, (1,)).item()
-
+        if self.num_channels == 1:
+            val = 1.0
+        else:
+            val = torch.rand(1)
         index = self.indices[idx]
 
         if label == 0:
-            image[index, :] = 1.0
+            image[:, index, :] = val
         else:
-            image[:, index] = 1.0
+            image[:, :, index] = val
             
         return image, torch.tensor(label).float()
