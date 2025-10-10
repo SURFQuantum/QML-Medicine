@@ -22,7 +22,22 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = []
+dependencies = [
+    "torch",
+    "torchvision",
+    "torcheval",
+    "torchmetrics",
+    "pennylane",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "wandb",
+    "pyyaml",
+    "h5py",
+    "gdown",
+    "tensorboard",
+    "tqdm"
+]
 description = "Image Processing using Quantum Computers"
 keywords = ["quantum computing"," image processing"]
 license = {file = "LICENSE"}
