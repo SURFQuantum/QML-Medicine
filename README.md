@@ -2,7 +2,14 @@
 
 Quantum advantage for medical applications.
 
-## Quick Start
+[![github license badge](https://img.shields.io/github/license/SURFQuantum/QML-Medicine)](https://github.com/SURFQuantum/QML-Medicine)
+[![build](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/build.yml)
+
+<!-- [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=coverage)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
+[![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=SURFQuantum_QML-Medicine&metric=alert_status)](https://sonarcloud.io/dashboard?id=SURFQuantum_QML-Medicine)
+[![sonarcloud](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/SURFQuantum/QML-Medicine/actions/workflows/sonarcloud.yml) -->
+
+## How to use qcm
 
 1.  **Create a virtual environment:**
     ```bash
@@ -12,7 +19,7 @@ Quantum advantage for medical applications.
 
 2.  **Install dependencies:**
     ```bash
-    pip install -r requirements.txt
+    pip install .
     ```
 
 3.  **Set up the data:**
@@ -52,6 +59,10 @@ The training behavior is controlled by `config.yaml`. Here is a brief overview o
     * **`epochs`**: The total number of training epochs.
 
 ## Expected Outputs
+## Contributing
+
+If you want to contribute to the development of qcm,
+have a look at the [contribution guidelines](CONTRIBUTING.md).
 
 After running the training script, you can expect the following outputs:
 

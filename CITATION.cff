@@ -1,0 +1,15 @@
+# YAML 1.2
+---
+cff-version: "1.2.0"
+title: "qcm"
+authors:
+  - family-names: Quantum
+    given-names: SURF
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+date-released: 2025-10-08
+version: "0.1.0"
+repository-code: "https://github.com/SURFQuantum/qcm"
+keywords:
+  - "quantum computing"
+  - " image processing"
+message: "If you use this software, please cite it using these metadata."
