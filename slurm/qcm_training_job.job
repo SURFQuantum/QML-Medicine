@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --time=01:00:00
+#SBATCH --partition gpu_a100
+#SBATCH --gpus 1
+
+# Default to 'classical' if no mode is provided
+MODE=${1:-classical}
+
+# load environment
+source ../venv/bin/activate
+
+# execution script
+python src/train.py --config configs/config.yaml --mode $MODE
