@@ -1,0 +1,33 @@
+{
+    "run_label": "QCNN_Benchmark_quantum_8q",
+    "problem_context": {
+        "known_minimum": 0.1,
+        "optimality_threshold": 0.01,
+        "run_label": "QCNN_Benchmark_quantum_8q"
+    },
+    "performance_summary": {
+        "final_cost": null,
+        "optimality_gap": null,
+        "convergence_steps": null,
+        "total_iterations": null
+    },
+    "profiling_summary": {
+        "total_wall_clock_time_s": 91.85338854789734,
+        "total_quantum_time_s": 0.0,
+        "avg_quantum_eval_time_s": 0.0
+    },
+    "circuit_complexity": {
+        "circuit_depth": 24,
+        "num_qubits": 8,
+        "max_two_qubit_gates": 7
+    },
+    "raw_results_keys": [
+        "cost_history",
+        "start_time",
+        "end_time",
+        "quantum_eval_times",
+        "num_qubits",
+        "circuit_depth",
+        "max_two_qubit_gates"
+    ]
+}
