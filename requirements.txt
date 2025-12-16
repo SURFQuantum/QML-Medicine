@@ -11,3 +11,7 @@ pyyaml
 h5py
 gdown
 tensorboard
+qiskit==2.1.2
+qiskit-aer==0.17.2
+qiskit-ibm-runtime==0.41.1
+pennylane-qiskit==0.43.0

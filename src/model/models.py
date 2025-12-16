@@ -8,6 +8,8 @@ import pennylane as qml
 # =============================================================================
 # Backbones
 # =============================================================================
+
+
 class PCAMBackbone(nn.Module):
     def __init__(self, latent_dim: int = 64, filters: int = 4):
         super().__init__()
@@ -53,10 +55,12 @@ class ClassicalHead(nn.Module):
         return self.out(x)
 
 class QuantumHeadAngle(nn.Module):
-    def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong'):
+    def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong', dev=None):
         super().__init__()
         self.n_qubits = n_qubits
         self.n_layers = n_layers
+        self.num_classes = num_classes
+        self.dev = dev
 
         if entangling_layer == 'strong':
             self.q_params = nn.Parameter(torch.randn(n_layers, n_qubits, 3))
@@ -67,30 +71,44 @@ class QuantumHeadAngle(nn.Module):
         else:
             raise ValueError(f"Unknown entangling_layer: {entangling_layer}")
 
-        dev = qml.device("default.qubit", wires=n_qubits)
-        @qml.qnode(dev, interface="torch", diff_method="backprop")
+        if self.dev is None:
+            raise ValueError("PennyLane device must be provided")
+        
+        @qml.qnode(self.dev, interface="torch", diff_method="finite-diff")
         def circuit(inputs, q_params_):
             qml.templates.AngleEmbedding(inputs, wires=range(n_qubits))
             entangler(q_params_, wires=range(n_qubits))
             return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
+        
         self.circuit = circuit
         self.classifier = nn.Linear(n_qubits, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        def circuit_wrapper(single_input):
-            return self.circuit(single_input, self.q_params)
+        # A lot of errors around vmap!!
+        #def circuit_wrapper(single_input):
+        #    return self.circuit(single_input, self.q_params)
         
-        raw_vmap_output = vmap(circuit_wrapper)(x)
-        quantum_features = torch.stack(raw_vmap_output, dim=1).float()
+        #raw_vmap_output = vmap(circuit_wrapper)(x)
+        #quantum_features = torch.stack(raw_vmap_output, dim=1).float()
         
+        batch_size = x.shape[0]
+        quantum_features = []
+
+        for i in range(batch_size):
+            expvals = self.circuit(x[i], self.q_params)
+            quantum_features.append(torch.stack(expvals))
+
+        quantum_features = torch.stack(quantum_features).float()
+
         return self.classifier(quantum_features)
 
 class QuantumHeadAmplitude(nn.Module):
-    def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong'):
+    def __init__(self, n_qubits: int, num_classes: int, n_layers: int = 1, entangling_layer: str = 'strong', dev=None):
         super().__init__()
         self.n_qubits = n_qubits
         self.n_layers = n_layers
         self.required_latent_dim = 2**n_qubits
+        self.dev = dev
 
         if entangling_layer == 'strong':
             self.q_params = nn.Parameter(torch.randn(n_layers, n_qubits, 3))
@@ -101,8 +119,11 @@ class QuantumHeadAmplitude(nn.Module):
         else:
             raise ValueError(f"Unknown entangling_layer: {entangling_layer}")
 
-        dev = qml.device("default.qubit", wires=n_qubits)
-        @qml.qnode(dev, interface="torch", diff_method="backprop")
+        if self.dev is None:
+            raise ValueError("PennyLane device must be provided")
+
+
+        @qml.qnode(self.dev, interface="torch", diff_method="finite-diff")
         def circuit(inputs, q_params_):
             qml.AmplitudeEmbedding(features=inputs, wires=range(n_qubits), normalize=True)
             entangler(q_params_, wires=range(n_qubits))
@@ -121,6 +142,7 @@ class QuantumHeadAmplitude(nn.Module):
         # === FIX IS HERE ===
         # 1. raw_features is a LIST of tensors, one for each measurement.
         raw_features = self.circuit(x, self.q_params)
+
         # 2. Stack the list into a single tensor. Shape becomes (n_qubits, batch_size)
         stacked_features = torch.stack(raw_features, dim=0)
         # 3. Permute to (batch_size, n_qubits) and cast to float for the linear layer.
@@ -132,11 +154,12 @@ class QuantumHeadAmplitude(nn.Module):
 # Main Classifier
 # =============================================================================
 class HybridClassifier(nn.Module):
-    def __init__(self, config: dict, use_quantum: bool = False):
+    def __init__(self, config: dict, use_quantum: bool = False, device: qml.device = None):
         super().__init__()
         model_cfg = config['model']
         dataset_type = config['dataset_type']
-        
+        self.device = device
+
         # 1. Select Backbone
         if dataset_type == 'pcam':
             self.backbone = PCAMBackbone(
@@ -157,7 +180,8 @@ class HybridClassifier(nn.Module):
         if use_quantum:
             head_type = model_cfg.get('quantum_head_type', 'amplitude')
             n_qubits = model_cfg['n_qubits']
-            
+            n_quantum_layers = model_cfg['n_quantum_layers']
+
             if head_type == 'amplitude':
                 latent_dim = 2**n_qubits
                 if dataset_type == 'tcga':
@@ -169,7 +193,8 @@ class HybridClassifier(nn.Module):
                     n_qubits=n_qubits,
                     num_classes=num_classes,
                     n_layers=model_cfg['n_quantum_layers'],
-                    entangling_layer=model_cfg['entangling_layer']
+                    entangling_layer=model_cfg['entangling_layer'],
+                    dev=self.device
                 )
             elif head_type == 'angle':
                 latent_dim = n_qubits
@@ -182,7 +207,8 @@ class HybridClassifier(nn.Module):
                     n_qubits=n_qubits,
                     num_classes=num_classes,
                     n_layers=model_cfg['n_quantum_layers'],
-                    entangling_layer=model_cfg['entangling_layer']
+                    entangling_layer=model_cfg['entangling_layer'],
+                    dev=self.device
                 )
             else:
                 raise ValueError(f"Unknown quantum_head_type: {head_type}")
@@ -193,3 +219,17 @@ class HybridClassifier(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.backbone(x)
         return self.head(x)
+    
+class FullModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.backbone = TCGABackbone()
+        self.quantumhead = QuantumHeadAmplitude()
+        self.classifier = HybridClassifier()  
+
+    def forward(self,x):
+        x = self.backbone(x)
+        x = torch.flatten(x, 1)
+        x = self.quantumhead(x)
+        x = self.classifier(x)
+        return x

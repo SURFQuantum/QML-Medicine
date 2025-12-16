@@ -16,9 +16,17 @@ from argparse import ArgumentParser
 import logging
 from datetime import datetime
 
+import pennylane as qml
+from qiskit_ibm_runtime.fake_provider import FakeManilaV2
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel
+
+from utils.coherence import CoherenceCalculator
 from data.datasets import get_dataloaders
 from model.models import HybridClassifier # Updated model import
 from utils.functions import visualize_latents, log_losses_to_csv
+
+#logging.getLogger("qiskit").setLevel(logging.ERROR)
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -27,11 +35,34 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+logging.getLogger("qiskit").setLevel(logging.WARNING)
+logging.getLogger("qiskit_aer").setLevel(logging.WARNING)
+logging.getLogger("pennylane").setLevel(logging.WARNING)
 
 def load_config(path: str) -> dict:
     logger.info(f"Loading config from: {path}")
     with open(path, 'r') as f:
         return yaml.safe_load(f)
+
+def qml_backend(n_qubits: int, shots: int = 1024):
+    backend = FakeManilaV2()
+    logger.info(f"Using backend: {backend}")
+
+    noise_model = NoiseModel.from_backend(backend)  
+
+    sim_backend = AerSimulator(
+        noise_model=noise_model,
+        basis_gates=noise_model.basis_gates
+    )
+
+    qml_dev = qml.device(
+        "qiskit.aer",
+        wires=n_qubits,
+        backend=sim_backend,
+        shots=shots
+    )
+
+    return backend, qml_dev
 
 
 def train_epoch(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, optimizer: torch.optim.Optimizer, scheduler, epoch: int, config: dict, writer: SummaryWriter):
@@ -95,7 +126,6 @@ def validate(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, epo
                 output = model(x)
                 pred = torch.argmax(output, dim=1)
                 val_loss = criterion(output, y)
-            
             metric.update(pred, y)
             val_losses.append(val_loss.item())
 
@@ -106,8 +136,35 @@ def validate(model: nn.Module, dataloader: DataLoader, criterion: nn.Module, epo
     writer.add_scalar(f'Val/{metric_name}', metric_val.item(), epoch)
     logger.info(f"Validation Epoch {epoch}: Loss={avg_val_loss:.4f}, {metric_name}={metric_val.item():.4f}")
     
-    return avg_val_loss
+    return avg_val_loss, metric_val
 
+def coherence_check(config, qml_dev, backend, model):
+    if not hasattr(model, "head"):
+        logger.warning("Model has no quantum head.")
+        return
+
+    q_head = model.head
+    if not hasattr(q_head, "circuit"):
+        logger.warning("Quantum head has no circuit.")
+        return
+
+    qnode = q_head.circuit
+    q_params = q_head.q_params
+
+    n_qubits = config["model"]["n_qubits"]
+    head_type = config["model"].get("quantum_head_type", "amplitude")
+
+    if head_type == "angle":
+        dummy_inputs = torch.zeros(n_qubits)
+    else:  # amplitude
+        dummy_inputs = torch.zeros(2 ** n_qubits)
+
+    logger.info("Running quantum coherence check...")
+
+    calc = CoherenceCalculator(config=config["model"],backend=backend)
+    total_gate_time = calc.forward(qnode, dummy_inputs, q_params)
+
+    logger.info(f"Circuit gate time = {total_gate_time * 1e6:.2f} \u03BCs") #\u03BC = \mu
 
 def main():
     parser = ArgumentParser()
@@ -115,20 +172,36 @@ def main():
     parser.add_argument('--mode', type=str, choices=['classical', 'quantum'], default='classical')
     args = parser.parse_args()
     
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     config = load_config(args.config)
     dataset_type = config.get('dataset_type', 'pcam')
 
-    # Define run name and log file path
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_name = f"{dataset_type}_{args.mode}_{timestamp}"
-    log_filepath = Path("./logs/training_log.csv")
+    final_epoch = config['training']['epochs']
+    log_filepath = Path(f"./logs/training_log_{args.mode}_mode_{final_epoch}_epochs_{timestamp}.csv")
     log_filepath.parent.mkdir(exist_ok=True)
+
+    # Define run name and log file path
+    run_name = f"{dataset_type}_{args.mode}_{final_epoch}_epochs_{timestamp}"
+
+    qml_dev = None
+    backend = None
 
     use_quantum = args.mode == 'quantum'
     logger.info(f"Initializing model for dataset '{dataset_type}' in {'quantum' if use_quantum else 'classical'} mode")
-    model = HybridClassifier(config=config, use_quantum=use_quantum)
-    model.to(device)
     
+    if use_quantum:
+        n_qubits = config["model"].get("n_qubits", 4)
+        shots = config.get("quantum", {}).get("shots", 1024)
+
+        backend, qml_dev = qml_backend(n_qubits=n_qubits, shots=shots)
+        
+    model = HybridClassifier(config=config, device=qml_dev, use_quantum=use_quantum)
+    model.to(device)
+
+    if use_quantum:
+        coherence_check(config, qml_dev, backend, model)
+
     logger.info("Loading data...")
     train_loader, val_loader = get_dataloaders(config)
 
@@ -144,17 +217,20 @@ def main():
         logger.info("Using Cross-Entropy loss for TCGA.")
 
     writer = SummaryWriter(log_dir=f"runs/{run_name}")
+
     train_epoch_losses = []
     val_epoch_losses = []
+    accuracies = []
 
     for epoch in range(config['training']['epochs']):
         avg_train_loss = train_epoch(model, train_loader, criterion, optimizer, scheduler, epoch, config, writer)
-        avg_val_loss = validate(model, val_loader, criterion, epoch, config, writer)
+        avg_val_loss, accuracy = validate(model, val_loader, criterion, epoch, config, writer)
         
         train_epoch_losses.append(avg_train_loss)
         val_epoch_losses.append(avg_val_loss)
+        accuracies.append(float(accuracy))
 
-    log_losses_to_csv(log_filepath, run_name, train_epoch_losses, val_epoch_losses)
+    log_losses_to_csv(log_filepath, run_name, train_epoch_losses, val_epoch_losses, accuracies)
 
     # Save model and visualize latents
     save_dir = Path("./models")

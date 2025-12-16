@@ -12,7 +12,7 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-def log_losses_to_csv(filepath: Path, run_name: str, train_losses: list, val_losses: list):
+def log_losses_to_csv(filepath: Path, run_name: str, train_losses: list, val_losses: list, accuracies: list):
     """
     Logs training and validation losses to a CSV file, adding a new column for each run.
     """
@@ -27,10 +27,12 @@ def log_losses_to_csv(filepath: Path, run_name: str, train_losses: list, val_los
     # Define new column names for this run
     train_col_name = f'train_loss_{run_name}'
     val_col_name = f'val_loss_{run_name}'
-    
+    acc_col_name = f'accuracy_{run_name}'
+
     # Add the new loss data as columns
     df[train_col_name] = train_losses
     df[val_col_name] = val_losses
+    df[acc_col_name] = accuracies
 
     # Save the updated DataFrame back to CSV
     filepath.parent.mkdir(parents=True, exist_ok=True) # Ensure the directory exists
@@ -50,7 +52,6 @@ def visualize_latents(model: torch.nn.Module, dataloader: DataLoader, save_path:
             labels.extend(y.cpu().tolist())
 
     latents = torch.cat(latents)
-    print(labels)
     tsne = TSNE(n_components=2, perplexity=30)
     embedded = tsne.fit_transform(latents)
     
