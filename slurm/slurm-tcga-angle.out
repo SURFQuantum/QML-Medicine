@@ -1,0 +1,14 @@
+
+JOB STATISTICS
+==============
+Job ID: 15068991
+Cluster: snellius
+User/Group: juliusa/juliusa
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:11
+CPU Efficiency: 0.25% of 01:14:42 core-walltime
+Job Wall-clock time: 00:04:09
+Memory Utilized: 369.16 MB
+Memory Efficiency: 0.30% of 120.00 GB (120.00 GB/node)

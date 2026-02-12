@@ -132,10 +132,11 @@ class QuantumHeadAmplitude(nn.Module):
 # Main Classifier
 # =============================================================================
 class HybridClassifier(nn.Module):
-    def __init__(self, config: dict, use_quantum: bool = False):
+    def __init__(self, config: dict, use_quantum: bool = False, num_quantum_layers: int = 1):
         super().__init__()
         model_cfg = config['model']
         dataset_type = config['dataset_type']
+        self.num_quantum_layers = num_quantum_layers
         
         # 1. Select Backbone
         if dataset_type == 'pcam':
@@ -168,7 +169,7 @@ class HybridClassifier(nn.Module):
                 self.head = QuantumHeadAmplitude(
                     n_qubits=n_qubits,
                     num_classes=num_classes,
-                    n_layers=model_cfg['n_quantum_layers'],
+                    n_layers=self.num_quantum_layers,
                     entangling_layer=model_cfg['entangling_layer']
                 )
             elif head_type == 'angle':
@@ -181,7 +182,7 @@ class HybridClassifier(nn.Module):
                 self.head = QuantumHeadAngle(
                     n_qubits=n_qubits,
                     num_classes=num_classes,
-                    n_layers=model_cfg['n_quantum_layers'],
+                    n_layers=self.num_quantum_layers,
                     entangling_layer=model_cfg['entangling_layer']
                 )
             else:

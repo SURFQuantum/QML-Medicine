@@ -17,4 +17,3 @@ source venv/bin/activate
 
 # execution script
 python src/train.py --config configs/config.yaml --mode $MODE
-

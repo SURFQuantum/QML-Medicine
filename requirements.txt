@@ -11,3 +11,4 @@ pyyaml
 h5py
 gdown
 tensorboard
+tqdm
